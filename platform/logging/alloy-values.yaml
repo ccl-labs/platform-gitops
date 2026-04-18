@@ -41,6 +41,28 @@ alloy:
         }
       }
 
+      // OTLPでトレースを受信してTempoに転送
+      otelcol.receiver.otlp "default" {
+        grpc {
+          endpoint = "0.0.0.0:4317"
+        }
+        http {
+          endpoint = "0.0.0.0:4318"
+        }
+        output {
+          traces = [otelcol.exporter.otlp.tempo.input]
+        }
+      }
+
+      otelcol.exporter.otlp "tempo" {
+        client {
+          endpoint = "tempo.tracing.svc.cluster.local:4317"
+          tls {
+            insecure = true
+          }
+        }
+      }
+
   resources:
     requests:
       memory: 128Mi
