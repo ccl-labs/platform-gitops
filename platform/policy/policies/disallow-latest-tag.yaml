@@ -32,14 +32,11 @@ spec:
                 - external-secrets
       validate:
         message: "latestタグ・タグ未指定のイメージは使用できません。明示的なバージョンタグを指定してください。"
-        foreach:
-          - list: "request.object.spec.containers"
-            deny:
-              conditions:
-                any:
-                  - key: "{{ element.image }}"
-                    operator: Equals
-                    value: "*:latest"
-                  - key: "{{ element.image }}"
-                    operator: NotContains
-                    value: ":"
+        deny:
+          conditions:
+            any:
+              - key: "{{ images.containers.*.tag }}"
+                operator: AnyIn
+                value:
+                  - "latest"
+                  - ""
