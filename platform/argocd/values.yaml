@@ -6,7 +6,7 @@ configs:
     server.insecure: true
   cm:
     # リポジトリのポーリング間隔（デフォルト180s、明示的に設定）
-    timeout.reconciliation: 180s
+    timeout.reconciliation: 180s # self-managed test
 server:
   ingress:
     enabled: true
