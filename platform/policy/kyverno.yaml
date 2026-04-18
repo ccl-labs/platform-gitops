@@ -33,6 +33,7 @@ spec:
       kind: CustomResourceDefinition
       jsonPointers:
         - /metadata/labels
+        - /metadata/annotations
     - group: batch
       kind: Job
       name: kyverno-migrate-resources
