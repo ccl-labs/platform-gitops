@@ -37,14 +37,3 @@ chunksCache:
   enabled: false
 resultsCache:
   enabled: false
-
-# GrafanaのデータソースとしてLokiを自動登録
-grafana:
-  datasources:
-    enabled: true
-    datasources.yaml:
-      datasources:
-        - name: Loki
-          type: loki
-          url: http://loki.logging.svc.cluster.local:3100
-          isDefault: false

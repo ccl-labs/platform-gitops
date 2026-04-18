@@ -12,6 +12,12 @@ grafana:
           - grafana.localhost
   # 管理者パスワード（ポートフォリオ用途のため固定値）
   adminPassword: admin
+  # Lokiデータソース
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      url: http://loki.logging.svc.cluster.local:3100
+      isDefault: false
 
 prometheus:
   prometheusSpec:
