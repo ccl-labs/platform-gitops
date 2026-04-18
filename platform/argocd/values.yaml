@@ -12,3 +12,6 @@ server:
     enabled: true
     ingressClassName: nginx
     hostname: argocd.localhost
+    tls: true
+    annotations:
+      cert-manager.io/cluster-issuer: local-ca-issuer
