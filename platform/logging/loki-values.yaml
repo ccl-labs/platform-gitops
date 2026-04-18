@@ -1,0 +1,50 @@
+loki:
+  auth_enabled: false
+  commonConfig:
+    replication_factor: 1
+  storage:
+    type: filesystem
+  schemaConfig:
+    configs:
+      - from: "2024-01-01"
+        store: tsdb
+        object_store: filesystem
+        schema: v13
+        index:
+          prefix: index_
+          period: 24h
+
+deploymentMode: SingleBinary
+
+singleBinary:
+  replicas: 1
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
+      cpu: 300m
+
+# テスト用バックエンドコンポーネントは無効化
+backend:
+  replicas: 0
+read:
+  replicas: 0
+write:
+  replicas: 0
+chunksCache:
+  enabled: false
+resultsCache:
+  enabled: false
+
+# GrafanaのデータソースとしてLokiを自動登録
+grafana:
+  datasources:
+    enabled: true
+    datasources.yaml:
+      datasources:
+        - name: Loki
+          type: loki
+          url: http://loki.logging.svc.cluster.local:3100
+          isDefault: false
