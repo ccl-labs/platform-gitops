@@ -6,6 +6,7 @@ image:
   repository: ghcr.io/okccl/sample-service
   tag: 22d1483
   pullPolicy: IfNotPresent
+  pullSecretName: ghcr-pull-secret
 
 replicaCount: 1
 
