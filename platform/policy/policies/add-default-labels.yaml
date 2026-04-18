@@ -1,0 +1,35 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-default-labels
+  annotations:
+    policies.kyverno.io/title: デフォルトラベルの自動付与
+    policies.kyverno.io/description: >-
+      すべてのPodに app.kubernetes.io/managed-by: platform ラベルを自動付与します。
+      プラットフォームが管理するリソースの識別・フィルタリングに使用します。
+spec:
+  rules:
+    - name: add-managed-by-label
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      exclude:
+        any:
+          - resources:
+              namespaces:
+                - kyverno
+                - kube-system
+                - argocd
+                - monitoring
+                - logging
+                - tracing
+                - ingress-nginx
+                - cert-manager
+                - external-secrets
+      mutate:
+        patchStrategicMerge:
+          metadata:
+            labels:
+              app.kubernetes.io/managed-by: platform

@@ -1,0 +1,42 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-resource-limits
+  annotations:
+    policies.kyverno.io/title: リソース制限の必須化
+    policies.kyverno.io/description: >-
+      すべてのコンテナにCPU・Memoryのlimitsが設定されていることを強制します。
+      設定がない場合、ノードのリソースを使い果たすリスクがあります。
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: require-limits
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      exclude:
+        any:
+          - resources:
+              namespaces:
+                - kyverno
+                - kube-system
+                - argocd
+                - monitoring
+                - logging
+                - tracing
+                - ingress-nginx
+                - cert-manager
+                - external-secrets
+      validate:
+        message: "すべてのコンテナにresources.limitsのcpuとmemoryを設定してください。"
+        pattern:
+          spec:
+            containers:
+              - name: "*"
+                resources:
+                  limits:
+                    cpu: "?*"
+                    memory: "?*"
