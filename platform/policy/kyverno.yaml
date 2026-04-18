@@ -29,6 +29,16 @@ spec:
     - group: rbac.authorization.k8s.io
       kind: ClusterRoleBinding
       name: kyverno:migrate-resources
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      jsonPointers:
+        - /spec/conversion/webhook/clientConfig/caBundle
+        - /metadata/annotations/api-approved.kubernetes.io
+    - group: batch
+      kind: Job
+      name: kyverno-migrate-resources
+      jsonPointers:
+        - /status
   syncPolicy:
     automated:
       prune: true
