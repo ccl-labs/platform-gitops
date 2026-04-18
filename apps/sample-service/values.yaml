@@ -4,7 +4,7 @@ app:
 
 image:
   repository: ghcr.io/okccl/sample-service
-  tag: 22d1483
+  tag: a3784b2
   pullPolicy: IfNotPresent
   pullSecretName: ghcr-pull-secret
 
