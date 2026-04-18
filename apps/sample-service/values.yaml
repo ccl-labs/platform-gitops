@@ -3,8 +3,8 @@ app:
   version: "1.0.0"
 
 image:
-  repository: nginx
-  tag: "alpine"
+  repository: ghcr.io/okccl/sample-service
+  tag: 22d1483
   pullPolicy: IfNotPresent
 
 replicaCount: 1
