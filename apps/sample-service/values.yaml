@@ -1,0 +1,45 @@
+app:
+  name: sample-service
+  version: "1.0.0"
+
+image:
+  repository: nginx
+  tag: "alpine"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+containerPort: 80
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+probes:
+  liveness:
+    path: /
+    initialDelaySeconds: 10
+    periodSeconds: 10
+  readiness:
+    path: /
+    initialDelaySeconds: 5
+    periodSeconds: 5
+
+ingress:
+  enabled: true
+  host: sample-service.localhost
+
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+
+serviceMonitor:
+  enabled: true
+  path: /metrics
+  interval: 30s
