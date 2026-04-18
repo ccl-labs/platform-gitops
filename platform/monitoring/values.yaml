@@ -17,6 +17,12 @@ grafana:
       type: loki
       url: http://loki.logging.svc.cluster.local:3100
       isDefault: false
+      jsonData:
+        derivedFields:
+          - matcherRegex: "traceID=(\\w+)"
+            name: TraceID
+            url: "$${__value.raw}"
+            datasourceUid: "P214B5B846CF3925F"
     - name: Tempo
       type: tempo
       url: http://tempo.tracing.svc.cluster.local:3200
