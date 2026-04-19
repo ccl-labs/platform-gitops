@@ -3,7 +3,7 @@ app:
   version: "1.0.0"
 image:
   repository: ghcr.io/okccl/sample-frontend
-  tag: latest
+  tag: cfeb206
   pullPolicy: IfNotPresent
 replicaCount: 1
 containerPort: 80
