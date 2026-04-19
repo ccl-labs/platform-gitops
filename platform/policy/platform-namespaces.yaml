@@ -91,11 +91,3 @@ metadata:
   name: goldilocks
   labels:
     platform-managed: "true"
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: sample-app
-  labels:
-    # Goldilocksダッシュボードの表示対象
-    goldilocks.fairwinds.com/enabled: "true"
