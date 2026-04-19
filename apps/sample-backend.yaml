@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: sample-app
+  name: sample-backend
   namespace: argocd
 spec:
   project: default
   sources:
     - repoURL: git@github.com:okccl/platform-charts.git
       targetRevision: main
-      path: charts/sample-app
+      path: charts/sample-backend
       helm:
         valueFiles:
-          - $values/apps/sample-app/values.yaml
+          - $values/apps/sample-backend/values.yaml
     - repoURL: git@github.com:okccl/platform-gitops.git
       targetRevision: main
       ref: values
