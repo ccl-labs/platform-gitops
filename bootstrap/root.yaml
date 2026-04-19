@@ -13,6 +13,7 @@ spec:
     path: platform
     directory:
       recurse: true
+      exclude: "policy/policies/*"
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
