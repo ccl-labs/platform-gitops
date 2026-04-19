@@ -3,10 +3,10 @@ app:
   version: "1.0.0"
 image:
   repository: ghcr.io/okccl/sample-backend
-  tag: ccb1d75
+  tag: cd19f62
   pullPolicy: IfNotPresent
   pullSecretName: ghcr-pull-secret
-replicaCount: 1
+replicaCount: 2
 containerPort: 8000
 resources:
   requests:
@@ -38,7 +38,7 @@ serviceMonitor:
   interval: 30s
 db:
   name: sample-backend-db
-  instances: 1
+  instances: 2
   postgresVersion: 17
   storageSize: 1Gi
   database: app
