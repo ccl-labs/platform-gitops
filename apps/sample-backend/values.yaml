@@ -3,7 +3,7 @@ app:
   version: "1.0.0"
 image:
   repository: ghcr.io/okccl/sample-backend
-  tag: 8501ba5
+  tag: 5b5adaf
   pullPolicy: IfNotPresent
   pullSecretName: ghcr-pull-secret
 replicaCount: 1
