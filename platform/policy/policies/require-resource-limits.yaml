@@ -20,18 +20,9 @@ spec:
       exclude:
         any:
           - resources:
-              namespaces:
-                - kyverno
-                - kube-system
-                - argocd
-                - monitoring
-                - logging
-                - tracing
-                - ingress-nginx
-                - cert-manager
-                - external-secrets
-                - cnpg-system
-                - minio
+              namespaceSelector:
+                matchLabels:
+                  platform-managed: "true"
       validate:
         message: "すべてのコンテナにresources.limitsのcpuとmemoryを設定してください。"
         pattern:

@@ -18,16 +18,9 @@ spec:
       exclude:
         any:
           - resources:
-              namespaces:
-                - kyverno
-                - kube-system
-                - argocd
-                - monitoring
-                - logging
-                - tracing
-                - ingress-nginx
-                - cert-manager
-                - external-secrets
+              namespaceSelector:
+                matchLabels:
+                  platform-managed: "true"
       mutate:
         patchStrategicMerge:
           metadata:
