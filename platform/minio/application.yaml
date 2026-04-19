@@ -1,0 +1,51 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minio
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: minio
+    targetRevision: 17.0.21
+    helm:
+      valuesObject:
+        auth:
+          existingSecret: minio-auth
+          rootUserSecretKey: root-user
+          rootPasswordSecretKey: root-password
+        mode: standalone
+        persistence:
+          enabled: true
+          size: 10Gi
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        defaultBuckets: "cnpg-backup"
+        service:
+          type: ClusterIP
+        ingress:
+          enabled: true
+          ingressClassName: nginx
+          hostname: minio.localhost
+        apiIngress:
+          enabled: true
+          ingressClassName: nginx
+          hostname: minio-api.localhost
+        metrics:
+          serviceMonitor:
+            enabled: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: minio
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
