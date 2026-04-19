@@ -30,6 +30,8 @@ spec:
                 - ingress-nginx
                 - cert-manager
                 - external-secrets
+                - cnpg-system
+                - minio
       validate:
         message: "すべてのコンテナにresources.limitsのcpuとmemoryを設定してください。"
         pattern:
