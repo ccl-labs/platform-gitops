@@ -1,0 +1,34 @@
+name: Update GitOps
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        required: true
+        type: string
+      image_repository:
+        required: true
+        type: string
+jobs:
+  update-gitops:
+    runs-on: ubuntu-latest
+    steps:
+      - name: platform-gitopsのチェックアウト
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITOPS_TOKEN }}
+      - name: アプリ名の特定
+        id: app
+        run: |
+          APP_NAME=$(echo "${{ inputs.image_repository }}" | sed 's|.*/||')
+          echo "name=${APP_NAME}" >> $GITHUB_OUTPUT
+      - name: imageの更新
+        run: |
+          sed -i "s|^\(\s*repository:\s*\).*|\1${{ inputs.image_repository }}|" apps/${{ steps.app.outputs.name }}/values.yaml
+          sed -i "s/^\(\s*tag:\s*\).*/\1${{ inputs.image_tag }}/" apps/${{ steps.app.outputs.name }}/values.yaml
+      - name: 変更をcommit & push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add apps/${{ steps.app.outputs.name }}/values.yaml
+          git commit -m "chore: update ${{ steps.app.outputs.name }} image to ${{ inputs.image_repository }}:${{ inputs.image_tag }}"
+          git push
