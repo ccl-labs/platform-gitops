@@ -1,17 +1,13 @@
 app:
-  name: sample-service
+  name: sample-backend
   version: "1.0.0"
-
 image:
-  repository: ghcr.io/okccl/sample-service
-  tag: a3784b2
+  repository: ghcr.io/okccl/sample-backend
+  tag: latest
   pullPolicy: IfNotPresent
   pullSecretName: ghcr-pull-secret
-
 replicaCount: 1
-
-containerPort: 80
-
+containerPort: 8000
 resources:
   requests:
     cpu: 100m
@@ -19,27 +15,23 @@ resources:
   limits:
     cpu: 500m
     memory: 256Mi
-
 probes:
   liveness:
-    path: /
+    path: /health
     initialDelaySeconds: 10
     periodSeconds: 10
   readiness:
-    path: /
+    path: /health
     initialDelaySeconds: 5
     periodSeconds: 5
-
 ingress:
   enabled: true
-  host: sample-service.localhost
-
+  host: sample-backend.localhost
 hpa:
   enabled: false
   minReplicas: 1
   maxReplicas: 3
   targetCPUUtilizationPercentage: 70
-
 serviceMonitor:
   enabled: true
   path: /metrics

@@ -1,23 +1,23 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: sample-service
+  name: sample-backend
   namespace: argocd
 spec:
   project: default
   sources:
     - repoURL: git@github.com:okccl/platform-charts.git
       targetRevision: main
-      path: charts/sample-service
+      path: charts/sample-backend
       helm:
         valueFiles:
-          - $values/apps/sample-service/values.yaml
+          - $values/apps/sample-backend/values.yaml
     - repoURL: git@github.com:okccl/platform-gitops.git
       targetRevision: main
       ref: values
   destination:
     server: https://kubernetes.default.svc
-    namespace: sample-service
+    namespace: sample-backend
   syncPolicy:
     automated:
       prune: true
