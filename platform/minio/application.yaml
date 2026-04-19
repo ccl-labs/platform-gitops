@@ -23,6 +23,14 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
+        makeBucketJob:
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
         buckets:
           - name: cnpg-backup
             policy: none
