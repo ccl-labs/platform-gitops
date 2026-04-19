@@ -6,15 +6,12 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://charts.bitnami.com/bitnami
+    repoURL: https://charts.min.io
     chart: minio
-    targetRevision: 17.0.21
+    targetRevision: 5.4.0
     helm:
       valuesObject:
-        auth:
-          existingSecret: minio-auth
-          rootUserSecretKey: root-user
-          rootPasswordSecretKey: root-password
+        existingSecret: minio-auth
         mode: standalone
         persistence:
           enabled: true
@@ -26,20 +23,24 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
-        defaultBuckets: "cnpg-backup"
-        service:
-          type: ClusterIP
+        buckets:
+          - name: cnpg-backup
+            policy: none
+            purge: false
         ingress:
           enabled: true
           ingressClassName: nginx
-          hostname: minio.localhost
-        apiIngress:
+          hosts:
+            - minio.localhost
+        consoleIngress:
           enabled: true
           ingressClassName: nginx
-          hostname: minio-api.localhost
+          hosts:
+            - minio-console.localhost
         metrics:
           serviceMonitor:
             enabled: true
+            includeNode: true
   destination:
     server: https://kubernetes.default.svc
     namespace: minio
