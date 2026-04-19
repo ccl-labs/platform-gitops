@@ -1,0 +1,9 @@
+# platform-gitops/platform/vpa/values.yaml
+recommender:
+  enabled: true
+
+updater:
+  enabled: false
+
+admissionController:
+  enabled: false

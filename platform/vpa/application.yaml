@@ -1,0 +1,28 @@
+# platform-gitops/platform/vpa/application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vpa
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://charts.fairwinds.com/stable
+      chart: vpa
+      targetRevision: 4.11.0
+      helm:
+        valueFiles:
+          - $values/platform/vpa/values.yaml
+    - repoURL: git@github.com:okccl/platform-gitops.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: vpa
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
