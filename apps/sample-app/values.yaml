@@ -1,5 +1,5 @@
 app:
-  name: sample-backend
+  name: sample-app
   version: "1.0.0"
 image:
   repository: ghcr.io/okccl/sample-backend
@@ -37,7 +37,7 @@ serviceMonitor:
   path: /metrics
   interval: 30s
 db:
-  name: sample-backend-db
+  name: sample-app-db
   instances: 1
   postgresVersion: 17
   storageSize: 1Gi
