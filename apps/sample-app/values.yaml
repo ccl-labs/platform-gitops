@@ -3,7 +3,7 @@ app:
   version: "1.0.0"
 image:
   repository: ghcr.io/okccl/sample-backend
-  tag: 96b5d5b
+  tag: 7c14aad
   pullPolicy: IfNotPresent
   pullSecretName: ghcr-pull-secret
 replicaCount: 1
@@ -55,3 +55,8 @@ db:
     limits:
       cpu: 500m
       memory: 512Mi
+env:
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "http://tempo.tracing.svc.cluster.local:4318"
+  - name: OTEL_SERVICE_NAME
+    value: "sample-backend"
