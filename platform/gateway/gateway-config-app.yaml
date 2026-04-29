@@ -1,8 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: root
+  name: gateway-config
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -10,16 +12,14 @@ spec:
   source:
     repoURL: git@github.com:okccl/platform-gitops.git
     targetRevision: HEAD
-    path: platform
-    directory:
-      recurse: true
-      exclude: "{policy/policies/*,ingress/config/*,secrets/config/*,gateway/config/*}"
+    path: platform/gateway/config
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: envoy-gateway-system
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true
