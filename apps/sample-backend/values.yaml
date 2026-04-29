@@ -45,7 +45,7 @@ db:
   owner: app
   backup:
     enabled: true
-    endpointURL: "http://minio.minio.svc.cluster.local:9000"
+    endpointURL: "http://host.k3d.internal:9000"
     bucketName: "cnpg-backup"
     secretName: "minio-backup-secret"
   resources:
