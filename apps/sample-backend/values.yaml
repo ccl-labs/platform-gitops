@@ -25,8 +25,7 @@ probes:
     initialDelaySeconds: 5
     periodSeconds: 5
 ingress:
-  enabled: true
-  host: sample-backend.localhost
+  enabled: false
 hpa:
   enabled: false
   minReplicas: 1
