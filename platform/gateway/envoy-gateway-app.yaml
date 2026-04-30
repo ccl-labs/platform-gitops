@@ -10,20 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: oci://docker.io/envoyproxy
-    chart: gateway-helm
-    targetRevision: v1.7.2
-    helm:
-      valuesObject:
-        deployment:
-          envoyGateway:
-            resources:
-              requests:
-                cpu: 100m
-                memory: 256Mi
-              limits:
-                cpu: 500m
-                memory: 512Mi
+    repoURL: git@github.com:okccl/platform-gitops.git
+    targetRevision: HEAD
+    path: platform/gateway/envoy-gateway
   destination:
     server: https://kubernetes.default.svc
     namespace: envoy-gateway-system

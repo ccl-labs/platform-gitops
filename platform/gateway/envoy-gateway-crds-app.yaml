@@ -10,17 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: oci://docker.io/envoyproxy
-    chart: gateway-crds-helm
-    targetRevision: v1.7.2
-    helm:
-      valuesObject:
-        crds:
-          gatewayAPI:
-            enabled: true
-            channel: standard
-          envoyGateway:
-            enabled: true
+    repoURL: git@github.com:okccl/platform-gitops.git
+    targetRevision: HEAD
+    path: platform/gateway/envoy-gateway-crds
   destination:
     server: https://kubernetes.default.svc
     namespace: envoy-gateway-system
