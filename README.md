@@ -354,3 +354,143 @@ db:
 - Kyvernoの `resources.limits` 必須ポリシーがCNPG recoveryをブロックする問題を発見。recoveryマニフェストには必ずresourcesを明示する。
 - クラスタ内バックアップストレージはDR対象外になるため、本番・検証環境では必ずクラスタ外に置く。
 - Phase 13（EKS移行）でバックアップ先をAWS S3に移行し、真のクラウドDRを実現予定。
+
+---
+ 
+## Phase 11: Hardening & Exploration
+ 
+### Phase 11-1: Gateway API（Envoy Gateway）
+ 
+ingress-nginx を廃止し、Envoy Gateway v1.7.2 に移行。
+ 
+### 構成コンポーネント
+| コンポーネント | namespace | 管理方法 | バージョン |
+|---|---|---|---|
+| Envoy Gateway | envoy-gateway-system | Rendered Manifests | v1.7.2 |
+ 
+### 公開サービス一覧
+| サービス | ホスト名 |
+|---|---|
+| sample-backend | sample-backend.localhost |
+| sample-frontend | sample-frontend.localhost |
+| ArgoCD | argocd.localhost |
+| Grafana | grafana.localhost |
+| Goldilocks | goldilocks.localhost |
+| Argo Rollouts Dashboard | rollouts.localhost |
+ 
+### 設計上の決定事項
+- ArgoCDからDockerHub OCIレジストリへの直接参照が認証失敗となるため、`helm template` でレンダリングしたYAMLをGitに格納する **Rendered Manifests Pattern** を採用。
+- HTTPRoute + ReferenceGrant によるクロスNamespaceルーティングを実装。
+- TLS対応は Phase 11 後半に実施予定。ローカル確認は Edge または curl を使用する（Chrome は HTTP → HTTPS リダイレクトがあるため）。
+---
+ 
+### Phase 11-2: Trivy Operator
+ 
+クラスタ全体のワークロードを継続スキャンし、脆弱性レポートを CRD として自動生成する。
+ 
+### 構成コンポーネント
+| コンポーネント | namespace | Helmチャート | バージョン |
+|---|---|---|---|
+| Trivy Operator | trivy-system | aquasecurity/trivy-operator | 0.32.1 |
+ 
+### 動作確認結果（初回スキャン）
+| Namespace | Critical | High |
+|---|---|---|
+| goldilocks | 5 | 24 |
+| argocd | 4 | 25 |
+| kube-system | 4〜7 | 21〜35 |
+| cnpg-system | 2 | 10 |
+| sample-app | 0 | 確認済み |
+ 
+### 動作確認
+```bash
+# 脆弱性レポートの確認
+kubectl get vulnerabilityreports --all-namespaces
+ 
+# 設定監査レポートの確認
+kubectl get configauditreports --all-namespaces
+ 
+# サマリー（Namespace別 Critical/High 件数）
+kubectl get vulnerabilityreports --all-namespaces -o json \
+  | jq -r '.items[] | [.metadata.namespace, .metadata.name, .report.summary.criticalCount, .report.summary.highCount] | @tsv' \
+  | sort
+```
+ 
+### 設計上の決定事項
+- `excludeNamespaces: "kube-system,trivy-system"` でスキャン除外対象を設定。
+- `ignoreUnfixed: true` で修正版が存在しない脆弱性を除外し、対応可能なものに集中。
+- ServiceMonitor を有効化し、kube-prometheus-stack と連携。
+---
+ 
+### Phase 11-3: Argo Rollouts
+ 
+Deployment をカナリア戦略の `Rollout` リソースに移行し、段階的なデプロイを実現する。
+ 
+### 構成コンポーネント
+| コンポーネント | namespace | Helmチャート | バージョン |
+|---|---|---|---|
+| Argo Rollouts | argo-rollouts | argo/argo-rollouts | 2.40.9 |
+ 
+### カナリア戦略（sample-backend）
+```yaml
+rollout:
+  enabled: true
+  canary:
+    steps:
+      - setWeight: 20   # 20%のトラフィックをカナリアへ
+      - pause: {}       # 手動 promote まで停止
+      - setWeight: 100  # 100%切り替え
+```
+ 
+### 動作確認
+```bash
+# Rollout の状態確認
+kubectl argo rollouts get rollout sample-backend -n sample-app
+ 
+# カナリアの promote
+kubectl argo rollouts promote sample-backend -n sample-app
+```
+ 
+### 設計上の決定事項
+- `common-app` Library Chart に `Rollout` テンプレートを追加（v0.2.0）。`rollout.enabled` フラグで Deployment と切り替え可能にし、Argo Rollouts がない環境でも同じ Chart が動作するように設計。
+- Rollouts Dashboard を `rollouts.localhost` で公開（Envoy Gateway HTTPRoute 経由）。
+---
+ 
+### Phase 11-4: KEDA
+ 
+Prometheus メトリクスを元にイベント駆動オートスケールを実現する。
+ 
+### 構成コンポーネント
+| コンポーネント | namespace | Helmチャート | バージョン |
+|---|---|---|---|
+| KEDA | keda | kedacore/keda | 2.19.0 |
+ 
+### ScaledObject（sample-backend）
+```yaml
+triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
+      query: sum(rate(http_requests_total{job="sample-backend"}[1m]))
+      threshold: "10"   # 10 req/sec を超えたらスケールアウト
+minReplicaCount: 1
+maxReplicaCount: 5
+```
+ 
+### 負荷テスト結果
+`oha` で 50並列・120秒の負荷（約2,000 req/sec）をかけ、1 → 5 レプリカへのスケールアウトを確認。
+負荷終了後、cooldownPeriod（30秒）+ HPA 安定化ウィンドウ（5分）を経て 1 レプリカに戻ることも確認。
+ 
+### 動作確認
+```bash
+# ScaledObject の状態確認
+kubectl get scaledobject -n sample-app
+ 
+# KEDA が自動生成した HPA の確認
+kubectl get hpa -n sample-app
+```
+ 
+### 設計上の決定事項
+- KEDA は HPA を自動生成するため、既存の `hpa.enabled` は無効のまま併用しない。
+- Rollout リソースを scaleTargetRef に指定することで、Argo Rollouts と KEDA を連携。
+- `common-app` Service に `name: http` を付与（v0.3.0）することで、ServiceMonitor が Prometheus scrape ターゲットを正しく解決できるようになった。
