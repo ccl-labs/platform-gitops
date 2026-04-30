@@ -59,3 +59,11 @@ env:
     value: "http://tempo.tracing.svc.cluster.local:4318"
   - name: OTEL_SERVICE_NAME
     value: "sample-backend"
+
+rollout:
+  enabled: true
+  canary:
+    steps:
+      - setWeight: 20
+      - pause: {}
+      - setWeight: 100
