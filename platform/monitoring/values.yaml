@@ -1,15 +1,6 @@
 grafana:
   ingress:
-    enabled: true
-    ingressClassName: nginx
-    annotations:
-      cert-manager.io/cluster-issuer: local-ca-issuer
-    hosts:
-      - grafana.localhost
-    tls:
-      - secretName: grafana-tls
-        hosts:
-          - grafana.localhost
+    enabled: false
   # 管理者パスワード（ポートフォリオ用途のため固定値）
   adminPassword: admin
   additionalDataSources:
@@ -29,7 +20,6 @@ grafana:
       isDefault: false
       jsonData:
         httpMethod: GET
-
 prometheus:
   prometheusSpec:
     # すべてのnamespaceのServiceMonitorを検出
@@ -43,7 +33,6 @@ prometheus:
       limits:
         memory: 1Gi
         cpu: 500m
-
 alertmanager:
   alertmanagerSpec:
     resources:

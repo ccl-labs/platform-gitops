@@ -1,19 +1,6 @@
 # platform-gitops/platform/goldilocks/values.yaml
 vpa:
   enabled: false
-
 dashboard:
   ingress:
-    enabled: true
-    ingressClassName: nginx
-    annotations:
-      cert-manager.io/cluster-issuer: selfsigned-issuer
-    hosts:
-      - host: goldilocks.localhost
-        paths:
-          - path: /
-            type: Prefix
-    tls:
-      - secretName: goldilocks-tls
-        hosts:
-          - goldilocks.localhost
+    enabled: false
