@@ -3,7 +3,7 @@ app:
   version: "1.0.0"
 image:
   repository: ghcr.io/okccl/sample-backend
-  tag: canary-test
+  tag: b5a1299
   pullPolicy: IfNotPresent
   pullSecretName: ghcr-pull-secret
 replicaCount: 2
