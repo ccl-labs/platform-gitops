@@ -112,3 +112,10 @@ metadata:
   name: argo-rollouts
   labels:
     platform-managed: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: keda
+  labels:
+    platform-managed: "true"
