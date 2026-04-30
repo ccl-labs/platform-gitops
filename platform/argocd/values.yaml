@@ -1,17 +1,5 @@
-global:
-  domain: argocd.localhost
 configs:
   params:
-    # HTTP通信を許可（Ingress経由のアクセスのため）
-    server.insecure: true
-  cm:
-    # リポジトリのポーリング間隔（デフォルト180s、明示的に設定）
-    timeout.reconciliation: 180s # self-managed test
-server:
-  ingress:
-    enabled: true
-    ingressClassName: nginx
-    hostname: argocd.localhost
-    tls: true
-    annotations:
-      cert-manager.io/cluster-issuer: local-ca-issuer
+    server.insecure: "true"
+ingress:
+  enabled: false
