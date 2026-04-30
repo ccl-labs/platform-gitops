@@ -98,3 +98,10 @@ metadata:
   name: envoy-gateway-system
   labels:
     platform-managed: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: trivy-system
+  labels:
+    platform-managed: "true"
