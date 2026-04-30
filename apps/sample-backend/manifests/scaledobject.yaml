@@ -17,5 +17,5 @@ spec:
         serverAddress: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
         metricName: http_requests_total
         query: |
-          sum(rate(http_requests_total{app_kubernetes_io_name="sample-backend"}[1m]))
+          sum(rate(http_requests_total{job="sample-backend"}[1m]))
         threshold: "10"
