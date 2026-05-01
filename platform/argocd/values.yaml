@@ -5,7 +5,7 @@ configs:
     url: "http://argocd.platform.local"
     oidc.config: |
       name: Keycloak
-      issuer: http://keycloak-keycloakx-http.keycloak.svc.cluster.local/auth/realms/platform
+      issuer: http://keycloak.platform.local/auth/realms/platform
       clientID: argocd
       clientSecret: $argocd-keycloak-secret:clientSecret
       requestedScopes:
