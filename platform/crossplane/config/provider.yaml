@@ -2,8 +2,9 @@ apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
 metadata:
   name: provider-helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
-  # Crossplane が作成するプロバイダ Pod の SA 名を固定
   serviceAccountTemplate:
     metadata:
       name: provider-helm
@@ -26,6 +27,8 @@ apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
   name: provider-helm
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   package: xpkg.crossplane.io/crossplane-contrib/provider-helm:v1.0.4
   runtimeConfigRef:

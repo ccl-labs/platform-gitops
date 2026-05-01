@@ -2,7 +2,8 @@ apiVersion: helm.crossplane.io/v1beta1
 kind: ProviderConfig
 metadata:
   name: in-cluster
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
-  # プロバイダ Pod の ServiceAccount をそのまま認証情報として使用
   credentials:
     source: InjectedIdentity

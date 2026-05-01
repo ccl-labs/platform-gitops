@@ -1,8 +1,9 @@
-# Crossplane が管理する Helm Release（インフラ/プラットフォーム層の管理を示すデモ）
 apiVersion: helm.crossplane.io/v1beta1
 kind: Release
 metadata:
   name: podinfo
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   providerConfigRef:
     name: in-cluster
