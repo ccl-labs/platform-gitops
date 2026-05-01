@@ -3,7 +3,7 @@ app:
   version: "1.0.0"
 image:
   repository: ghcr.io/okccl/sample-backend
-  tag: test-pr-flow
+  tag:   3e4f9ad
   pullPolicy: IfNotPresent
   pullSecretName: ghcr-pull-secret
 replicaCount: 2
