@@ -1,0 +1,23 @@
+# Crossplane が管理する Helm Release（インフラ/プラットフォーム層の管理を示すデモ）
+apiVersion: helm.crossplane.io/v1beta1
+kind: Release
+metadata:
+  name: podinfo
+spec:
+  providerConfigRef:
+    name: in-cluster
+  forProvider:
+    chart:
+      name: podinfo
+      repository: https://stefanprodan.github.io/podinfo
+      version: 6.7.0
+    namespace: crossplane-demo
+    values:
+      replicaCount: 1
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          cpu: 100m
+          memory: 128Mi
