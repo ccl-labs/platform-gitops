@@ -10,7 +10,11 @@ spec:
   hostnames:
     - "rollouts.localhost"
   rules:
-    - backendRefs:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
         - kind: Service
           name: argo-rollouts-dashboard
           namespace: argo-rollouts
