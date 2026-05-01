@@ -17,6 +17,9 @@ spec:
           ignoreUnfixed: true
         operator:
           excludeNamespaces: "kube-system,trivy-system"
+          # 同時スキャン数を制限（DB キャッシュロック競合を防ぐ）
+          concurrentNodeScanners: 1
+          concurrentScanJobsLimit: 1
         serviceMonitor:
           enabled: true
         resources:
