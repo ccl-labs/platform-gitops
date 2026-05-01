@@ -1,5 +1,23 @@
 configs:
   params:
     server.insecure: "true"
+  cm:
+    url: "http://argocd.localhost"
+    oidc.config: |
+      name: Keycloak
+      issuer: http://keycloak.localhost/realms/platform
+      clientID: argocd
+      clientSecret: $argocd-keycloak-secret:clientSecret
+      requestedScopes:
+        - openid
+        - profile
+        - email
+        - groups
+  rbac:
+    policy.csv: |
+      g, argocd-admins, role:admin
+    policy.default: role:readonly
+    scopes: "[groups]"
+
 ingress:
   enabled: false
