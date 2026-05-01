@@ -21,7 +21,7 @@ spec:
       ref: values
     - repoURL: git@github.com:okccl/platform-gitops.git
       targetRevision: main
-      path: platform/keycloak/config
+      path: platform/keycloak/app-config
   destination:
     server: https://kubernetes.default.svc
     namespace: keycloak
