@@ -8,7 +8,7 @@ spec:
     - name: eg
       namespace: envoy-gateway-system
   hostnames:
-    - "sample-frontend.localhost"
+    - "sample-frontend.platform.local"
   rules:
     - matches:
         - path:

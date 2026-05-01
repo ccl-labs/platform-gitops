@@ -8,7 +8,7 @@ spec:
     - name: eg
       namespace: envoy-gateway-system
   hostnames:
-    - "rollouts.localhost"
+    - "rollouts.platform.local"
   rules:
     - matches:
         - path:
