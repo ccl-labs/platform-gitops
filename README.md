@@ -7,34 +7,42 @@ Platform Engineering portfolio — GitOps management repository.
 ArgoCDのソースとなるリポジトリ。プラットフォーム全体の「あるべき姿」を管理する。
 
 ## ディレクトリ構成
-
+ 
 ```
 platform-gitops/
 ├── bootstrap/
-│   ├── root.yaml                        # ArgoCD の Root App（App of Apps）
-│   └── apps-root.yaml                   # サービス Application を管理する Root App
-├── platform/
-│   ├── argocd/                          # Phase 2
-│   ├── ingress/                         # Phase 3
-│   │   └── config/                      # Phase 10: CRD依存リソース（ClusterIssuer等）
-│   ├── secrets/                         # Phase 2
-│   │   └── config/                      # Phase 10: CRD依存リソース（ClusterSecretStore等）
-│   ├── monitoring/                      # Phase 4
-│   ├── logging/                         # Phase 4
-│   ├── tracing/                         # Phase 4
-│   ├── policy/                          # Phase 7
-│   ├── cnpg/                            # Phase 8
-│   ├── vpa/                             # Phase 9
-│   ├── goldilocks/                      # Phase 9
-│   ├── security/                        # Phase 11
-│   ├── scaling/                         # Phase 11
-│   └── gateway/                         # Phase 11
-├── apps/
-│   ├── sample-backend/                  # Phase 5/6
-│   └── sample-frontend/                 # Phase 5/6
-├── secrets/                             # SOPS × Age で暗号化した Secret（Phase 10）
-├── .sops.yaml                           # SOPS 暗号化ルール
-└── .mise.toml
+│   ├── root.yaml          # platform/ 配下を再帰的に監視する App-of-Apps
+│   └── apps-root.yaml     # apps/ 配下を監視する App-of-Apps
+├── platform/              # プラットフォームコンポーネント（root が自動検出）
+│   ├── argocd/
+│   ├── cilium/
+│   ├── cnpg/
+│   ├── crossplane/
+│   │   └── config/        # provider / providerconfig / release CR（root 除外）
+│   ├── gateway/
+│   │   └── config/        # HTTPRoute / ReferenceGrant（root 除外）
+│   ├── ingress/
+│   │   └── config/        # ClusterIssuer（root 除外）
+│   ├── logging/
+│   ├── monitoring/
+│   ├── policy/
+│   │   └── policies/      # Kyverno ポリシー（root 除外）
+│   ├── scaling/
+│   ├── secrets/
+│   │   └── config/        # ClusterSecretStore / ExternalSecret（root 除外）
+│   ├── security/
+│   ├── tracing/
+│   └── vpa/
+├── apps/                  # アプリケーション（apps-root が管理）
+│   ├── sample-backend.yaml
+│   ├── sample-backend/
+│   │   ├── values.yaml
+│   │   └── manifests/     # ScaledObject など追加リソース
+│   ├── sample-frontend.yaml
+│   └── sample-frontend/
+│       └── values.yaml
+└── secrets/
+    └── encrypted/         # SOPS × Age で暗号化した Secret
 ```
 
 ---
@@ -312,13 +320,6 @@ sops --decrypt secrets/encrypted/minio-backup-secret.yaml
 
 root appが管理する全Applicationにsync-waveを付与し、CRD依存の順序問題を構造的に解消した。
 
-| wave | 対象App | 理由 |
-|---|---|---|
-| 1 | cert-manager, external-secrets, kyverno | CRD基盤。他のAppが依存するCRDを提供 |
-| 2 | ingress-nginx, loki, alloy, tempo, vpa | CRD不要なコンポーネント |
-| 3 | kube-prometheus-stack, goldilocks, argocd, kyverno-policies | ingress-nginx webhookが必要 |
-| 4 | cnpg, cert-manager-config, external-secrets-config, sample-backend, sample-frontend | wave 3のCRD（PodMonitor等）が必要 |
-
 ### CRD依存リソースの分離
 
 root appが直接管理するとCRDが存在しない状態でSyncが失敗する問題を解消するため、
@@ -529,3 +530,117 @@ curl http://sample-backend.localhost/items
 - `/health` に DB ping を追加したことで、DB 障害時に readinessProbe が失敗しトラフィックが遮断される。フェイルオーバー完了後は自動で回復する。
 - コネクションプールの `max_inactive_connection_lifetime: 30` により、サーバー側で切断されたコネクションを使用前に検知できる。
 - リトライ対象は `PostgresConnectionError` / `TooManyConnectionsError` / `OSError` の一時的障害のみ。アプリバグ起因のエラーはリトライしない。
+
+### Phase 11-6: Crossplane（provider-helm）
+ 
+Crossplane v2.2.1 と provider-helm v1.0.4 を導入し、Helm Release を Kubernetes リソースとして GitOps 管理する構成を実証した。
+ 
+#### 構成コンポーネント
+ 
+| コンポーネント | namespace | 管理方法 | バージョン |
+|---|---|---|---|
+| Crossplane | crossplane-system | Helm Chart | 2.2.1 |
+| provider-helm | crossplane-system | Crossplane Provider | v1.0.4 |
+ 
+#### デプロイフロー
+ 
+```
+Git（Release CR）→ ArgoCD sync → Crossplane 調整 → Helm release デプロイ
+```
+ 
+ArgoCD がプラットフォーム・アプリの宣言を管理し、Crossplane が Helm release のライフサイクルを管理するという責務分離の構造をローカル環境で実証した。Phase 13（EKS）では `provider-aws` を使い、RDS や VPC などのクラウドリソースを同じ構造で管理する。
+ 
+#### 動作確認
+ 
+```bash
+# Crossplane が管理する Helm release の状態確認
+kubectl get release podinfo
+ 
+# provider-helm の状態確認
+kubectl get providers provider-helm
+```
+ 
+#### 設計上の決定事項
+- `ProviderConfig` と `Release` CR は provider-helm の CRD が揃ってから適用する必要があるため、sync-wave を分割した（wave 1: Provider + RBAC、wave 2: ProviderConfig + Release）。
+- `SkipDryRunOnMissingResource=true` を crossplane-config Application に設定し、CRD 未存在時の dry-run 失敗を回避。
+- ローカル環境では `InjectedIdentity`（プロバイダ Pod の ServiceAccount をそのまま認証情報として使用）で接続。
+---
+ 
+### Phase 11-7: Cilium（CNI置き換え）
+ 
+k3s デフォルトの flannel を Cilium v1.19.3（eBPF CNI）に置き換えた。
+ 
+#### 構成コンポーネント
+ 
+| コンポーネント | namespace | 管理方法 | バージョン |
+|---|---|---|---|
+| Cilium | kube-system | Helm Chart（bootstrap + ArgoCD） | 1.19.3 |
+ 
+#### bootstrap 順序の変更
+ 
+flannel 無効化後は CNI がない状態でクラスタが起動するため、CoreDNS など全 Pod が Pending になる。Cilium を先にインストールしてからその他の処理を行うよう順序を変更した。
+ 
+```
+cluster-create → install-cilium → fix-coredns → bootstrap-argocd → bootstrap-sync
+```
+ 
+#### k3d ローカル環境での制約
+ 
+`kubeProxyReplacement=true`（kube-proxy 完全置き換え）は k3d では起動順序の問題で CoreDNS が API サーバーに接続できなくなるため無効化。ローカル環境では Cilium は CNI + NetworkPolicy の担当に留め、kube-proxy は k3s に任せる。
+ 
+#### 動作確認
+ 
+```bash
+# Cilium の状態確認
+kubectl get pods -n kube-system -l app.kubernetes.io/name=cilium
+ 
+# ノードの接続性確認
+kubectl get nodes -o wide
+```
+ 
+#### 設計上の決定事項
+- Cilium は ArgoCD（wave 1）で GitOps 管理するが、bootstrap 時は ArgoCD より先に CNI が必要なため `make install-cilium` で別途インストールする。
+- `k8sServiceHost/Port` は `kubeProxyReplacement=false` では不要。指定すると operator が `0.0.0.0:6443` に接続しようとして失敗するため除外する。
+- `cluster.yaml` で `--flannel-backend=none` と `--disable-network-policy` を宣言し、Cilium に CNI と NetworkPolicy を委譲。
+---
+ 
+### 番外編：image tag 更新を PR 方式に変更
+ 
+`update-gitops.yaml` ワークフローを直接 push から PR + squash merge 方式に変更し、image tag 更新の履歴を GitHub 上の PR として残せるようにした。
+ 
+#### 変更前後の比較
+ 
+| | 変更前 | 変更後 |
+|---|---|---|
+| 方式 | main に直接 push | PR 作成 → squash merge |
+| 履歴 | コミットのみ | PR + コミット |
+| ブランチ | なし | `gitops/update-{app}-{tag}`（マージ後自動削除） |
+ 
+---
+ 
+### sync-wave 構成の整理（Phase 11 番外編）
+ 
+ArgoCD + KEDA + ESO の組み合わせで発生した問題を解消するため、sync-wave を整理した。
+ 
+#### 解消した問題
+ 
+**ESO webhook タイミングエラー**：ESO が wave 未設定のため ClusterSecretStore（wave 3）より後に起動し、webhook 検証に失敗していた。ESO を wave 1 に移動して解消。
+ 
+**KEDA と ArgoCD selfHeal の競合**：KEDA がスケールした `replicas` を ArgoCD が Git の値で上書きしていた。`values.yaml` から `replicaCount` を削除して KEDA の `minReplicaCount` に委ね、`ignoreDifferences` + `RespectIgnoreDifferences=true` で sync 時の上書きを防止。
+ 
+**Trivy DB キャッシュロック**：bootstrap 直後に複数のスキャン Job が同時起動し、Trivy DB のキャッシュロックが競合してエラーになっていた。`concurrentScanJobsLimit: 1` と `concurrentNodeScanners: 1` で逐次実行に制限して解消。
+
+---
+ 
+## sync-wave 構成
+ 
+ArgoCD の sync-wave により、CRD → Operator → 設定リソース → アプリの順序でデプロイが制御される。
+ 
+| Wave | 主なコンポーネント | 備考 |
+|---|---|---|
+| 1 | Cilium、Envoy Gateway CRDs、cert-manager、ESO | CRD・CNI・webhook を先行 |
+| 2 | Crossplane、Envoy Gateway、CNPG | Operator 層 |
+| 3 | ArgoCD、Monitoring、KEDA、Argo Rollouts、Trivy | プラットフォームサービス層 |
+| 4 | cert-manager-config、external-secrets-config、gateway-config | 設定リソース（各 Operator の CRD 依存） |
+| 5 | sample-backend、sample-frontend | アプリ層（CNPG Operator Ready 後） |
+| 6 | crossplane-config | provider-helm CRD 依存リソース |
