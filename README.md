@@ -25,7 +25,10 @@ platform-gitops/
 │   ├── policy/                          # Phase 7
 │   ├── cnpg/                            # Phase 8
 │   ├── vpa/                             # Phase 9
-│   └── goldilocks/                      # Phase 9
+│   ├── goldilocks/                      # Phase 9
+│   ├── security/                        # Phase 11
+│   ├── scaling/                         # Phase 11
+│   └── gateway/                         # Phase 11
 ├── apps/
 │   ├── sample-backend/                  # Phase 5/6
 │   └── sample-frontend/                 # Phase 5/6
@@ -494,3 +497,35 @@ kubectl get hpa -n sample-app
 - KEDA は HPA を自動生成するため、既存の `hpa.enabled` は無効のまま併用しない。
 - Rollout リソースを scaleTargetRef に指定することで、Argo Rollouts と KEDA を連携。
 - `common-app` Service に `name: http` を付与（v0.3.0）することで、ServiceMonitor が Prometheus scrape ターゲットを正しく解決できるようになった。
+
+---
+
+### Phase 11-5: DB リトライロジック
+
+sample-backend に asyncpg コネクションプールと tenacity によるリトライ処理を導入し、PostgreSQL フェイルオーバー時の接続断から自動回復できるようにした。
+
+#### アプリ側の変更（sample-backend リポジトリ）
+
+| 変更点 | 内容 |
+|---|---|
+| コネクションプール | `asyncpg.create_pool()` に移行（min: 2 / max: 10） |
+| リトライ処理 | `tenacity` による最大5回・指数バックオフ（1〜16秒） |
+| `/health` 改善 | `SELECT 1` による DB ping を追加。readinessProbe と連動 |
+
+#### 検証結果
+
+CNPG primary（db-2）を強制削除してフェイルオーバーを発生させ、db-3 への昇格後にアプリが自動回復することを確認した。
+
+```bash
+# フェイルオーバーの発生
+kubectl delete pod sample-backend-db-2 -n sample-app
+
+# 回復確認
+curl http://sample-backend.localhost/health
+curl http://sample-backend.localhost/items
+```
+
+#### 設計上の決定事項
+- `/health` に DB ping を追加したことで、DB 障害時に readinessProbe が失敗しトラフィックが遮断される。フェイルオーバー完了後は自動で回復する。
+- コネクションプールの `max_inactive_connection_lifetime: 30` により、サーバー側で切断されたコネクションを使用前に検知できる。
+- リトライ対象は `PostgresConnectionError` / `TooManyConnectionsError` / `OSError` の一時的障害のみ。アプリバグ起因のエラーはリトライしない。
