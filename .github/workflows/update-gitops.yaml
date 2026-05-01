@@ -11,19 +11,47 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITOPS_TOKEN }}
+
       - name: アプリ名の特定
         id: app
         run: |
           APP_NAME=$(echo "${{ github.event.client_payload.image_repository }}" | sed 's|.*/||')
           echo "name=${APP_NAME}" >> $GITHUB_OUTPUT
-      - name: imageの更新
+
+      - name: PRブランチの作成
+        id: branch
         run: |
-          sed -i "s|^\(\s*repository:\s*\).*|\1${{ github.event.client_payload.image_repository }}|" apps/${{ steps.app.outputs.name }}/values.yaml
-          sed -i "s/^\(\s*tag:\s*\).*/\1${{ github.event.client_payload.image_tag }}/" apps/${{ steps.app.outputs.name }}/values.yaml
-      - name: 変更をcommit & push
-        run: |
+          BRANCH="gitops/update-${APP_NAME}-${{ github.event.client_payload.image_tag }}"
+          echo "name=${BRANCH}" >> $GITHUB_OUTPUT
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "${BRANCH}"
+        env:
+          APP_NAME: ${{ steps.app.outputs.name }}
+
+      - name: imageの更新
+        run: |
+          sed -i "s|^\(\s*repository:\s*\).*|\1${{ github.event.client_payload.image_repository }}|" \
+            apps/${{ steps.app.outputs.name }}/values.yaml
+          sed -i "s/^\(\s*tag:\s*\).*/\1${{ github.event.client_payload.image_tag }}/" \
+            apps/${{ steps.app.outputs.name }}/values.yaml
+
+      - name: コミット & プッシュ
+        run: |
           git add apps/${{ steps.app.outputs.name }}/values.yaml
           git commit -m "chore: update ${{ steps.app.outputs.name }} image to ${{ github.event.client_payload.image_repository }}:${{ github.event.client_payload.image_tag }}"
-          git push
+          git push origin "${{ steps.branch.outputs.name }}"
+
+      - name: PR作成 & squash merge
+        run: |
+          PR_URL=$(gh pr create \
+            --title "chore: update ${{ steps.app.outputs.name }} image to ${{ github.event.client_payload.image_tag }}" \
+            --body "## 変更内容
+          - image: \`${{ github.event.client_payload.image_repository }}:${{ github.event.client_payload.image_tag }}\`
+          - 自動生成PR（GitHub Actions）" \
+            --base main \
+            --head "${{ steps.branch.outputs.name }}")
+          echo "PR作成: ${PR_URL}"
+          gh pr merge "${PR_URL}" --squash --delete-branch
+        env:
+          GH_TOKEN: ${{ secrets.GITOPS_TOKEN }}
