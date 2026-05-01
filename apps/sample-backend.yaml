@@ -23,6 +23,14 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: sample-app
+  ignoreDifferences:
+    - group: argoproj.io
+      kind: Rollout
+      jsonPointers:
+        # KEDA がスケールした replicaCount は無視
+        - /spec/replicas
+        # Helm のデフォルト値として付与される protocol: TCP を無視
+        - /spec/template/spec/containers/0/ports/0/protocol
   syncPolicy:
     automated:
       prune: true

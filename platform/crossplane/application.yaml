@@ -31,6 +31,11 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: crossplane-system
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/template/metadata/labels/app.kubernetes.io~1managed-by
   syncPolicy:
     automated:
       prune: true
