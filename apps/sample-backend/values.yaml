@@ -6,7 +6,6 @@ image:
   tag:   3e4f9ad
   pullPolicy: IfNotPresent
   pullSecretName: ghcr-pull-secret
-replicaCount: 2
 containerPort: 8000
 resources:
   requests:

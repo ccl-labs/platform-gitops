@@ -27,7 +27,7 @@ spec:
     - group: argoproj.io
       kind: Rollout
       jsonPointers:
-        # KEDA がスケールした replicaCount は無視
+        # KEDA が管理する replicaCount は無視
         - /spec/replicas
         # Helm のデフォルト値として付与される protocol: TCP を無視
         - /spec/template/spec/containers/0/ports/0/protocol
@@ -38,6 +38,8 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+      # ignoreDifferences のフィールドを sync 時にも上書きしない
+      - RespectIgnoreDifferences=true
     managedNamespaceMetadata:
       labels:
         goldilocks.fairwinds.com/enabled: "true"
