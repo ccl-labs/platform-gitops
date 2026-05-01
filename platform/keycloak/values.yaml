@@ -1,0 +1,50 @@
+replicas: 1
+
+command:
+  - "/opt/keycloak/bin/kc.sh"
+  - "start"
+  - "--http-port=8080"
+  - "--hostname=https://keycloak.localhost"
+  - "--hostname-backchannel-dynamic=true"
+  - "--proxy-headers=xforwarded"
+
+extraEnv: |
+  - name: KC_BOOTSTRAP_ADMIN_USERNAME
+    value: admin
+  - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: keycloak-admin-credentials
+        key: password
+  - name: KC_DB_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: keycloak-db-credentials
+        key: username
+  - name: KC_DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: keycloak-db-credentials
+        key: password
+  - name: JAVA_OPTS_APPEND
+    value: >-
+      -Djgroups.dns.query={{ include "keycloak.fullname" . }}-headless
+
+database:
+  vendor: postgres
+  hostname: keycloak-db-rw
+  port: 5432
+  database: keycloak
+
+service:
+  type: ClusterIP
+  httpPort: 80
+  httpsPort: 443
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "200m"
+  limits:
+    memory: "1Gi"
+    cpu: "1000m"
