@@ -4,7 +4,7 @@ command:
   - "/opt/keycloak/bin/kc.sh"
   - "start"
   - "--http-port=8080"
-  - "--hostname=https://keycloak.localhost"
+  - "--hostname=http://keycloak.localhost"
   - "--hostname-backchannel-dynamic=true"
   - "--proxy-headers=xforwarded"
 
