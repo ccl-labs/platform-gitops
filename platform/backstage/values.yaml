@@ -25,7 +25,8 @@ backstage:
           password: ${POSTGRES_PASSWORD}
           database: ${POSTGRES_DB}
           ssl:
-            require: false
+            require: true
+            rejectUnauthorized: false
 
   extraEnvVars:
     - name: BACKEND_SECRET
