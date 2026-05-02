@@ -34,30 +34,21 @@ backstage:
           name: backstage-secret
           key: BACKEND_SECRET
     - name: POSTGRES_HOST
-      valueFrom:
-        secretKeyRef:
-          name: backstage-db-app
-          key: host
+      value: "backstage-db-rw.backstage.svc.cluster.local"
     - name: POSTGRES_PORT
-      valueFrom:
-        secretKeyRef:
-          name: backstage-db-app
-          key: port
+      value: "5432"
     - name: POSTGRES_USER
       valueFrom:
         secretKeyRef:
-          name: backstage-db-app
+          name: backstage-db-credentials
           key: username
     - name: POSTGRES_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: backstage-db-app
+          name: backstage-db-credentials
           key: password
     - name: POSTGRES_DB
-      valueFrom:
-        secretKeyRef:
-          name: backstage-db-app
-          key: dbname
+      value: "app"
 
 postgresql:
   enabled: false
