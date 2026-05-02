@@ -32,6 +32,8 @@ backstage:
           ssl:
             require: true
             rejectUnauthorized: false
+      auth:
+        dangerouslyDisableDefaultAuthPolicy: true
 
     auth:
       environment: development
