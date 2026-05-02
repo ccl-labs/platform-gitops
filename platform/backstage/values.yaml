@@ -2,7 +2,7 @@ backstage:
   image:
     registry: ghcr.io
     repository: backstage/backstage
-    tag: v1.40.2
+    tag: v1.50.4
     pullPolicy: IfNotPresent
 
   appConfig:
