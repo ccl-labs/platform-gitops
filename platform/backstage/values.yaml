@@ -12,6 +12,9 @@ backstage:
 
     backend:
       baseUrl: http://backstage.platform.local
+      listen:
+        port: 7007
+        host: 0.0.0.0
       cors:
         origin: http://backstage.platform.local
         methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
