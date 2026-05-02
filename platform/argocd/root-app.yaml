@@ -11,6 +11,8 @@ spec:
     repoURL: git@github.com:okccl/platform-gitops.git
     targetRevision: HEAD
     path: platform/applications
+    directory:
+      exclude: vcluster-dev.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
