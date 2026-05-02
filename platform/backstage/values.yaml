@@ -1,0 +1,63 @@
+backstage:
+  image:
+    registry: ghcr.io
+    repository: backstage/backstage
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  appConfig:
+    app:
+      title: Platform Backstage
+      baseUrl: http://backstage.platform.local
+
+    backend:
+      baseUrl: http://backstage.platform.local
+      cors:
+        origin: http://backstage.platform.local
+        methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+        credentials: true
+      database:
+        client: pg
+        connection:
+          host: ${POSTGRES_HOST}
+          port: ${POSTGRES_PORT}
+          user: ${POSTGRES_USER}
+          password: ${POSTGRES_PASSWORD}
+          database: ${POSTGRES_DB}
+          ssl:
+            require: false
+
+  extraEnvVars:
+    - name: BACKEND_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: backstage-secret
+          key: BACKEND_SECRET
+    - name: POSTGRES_HOST
+      valueFrom:
+        secretKeyRef:
+          name: backstage-db-app
+          key: host
+    - name: POSTGRES_PORT
+      valueFrom:
+        secretKeyRef:
+          name: backstage-db-app
+          key: port
+    - name: POSTGRES_USER
+      valueFrom:
+        secretKeyRef:
+          name: backstage-db-app
+          key: username
+    - name: POSTGRES_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: backstage-db-app
+          key: password
+    - name: POSTGRES_DB
+      valueFrom:
+        secretKeyRef:
+          name: backstage-db-app
+          key: dbname
+
+postgresql:
+  enabled: false
