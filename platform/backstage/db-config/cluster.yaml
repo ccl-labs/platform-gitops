@@ -17,3 +17,5 @@ spec:
       owner: app
       secret:
         name: backstage-db-credentials
+      postInitSQL:
+        - ALTER ROLE app CREATEDB;
