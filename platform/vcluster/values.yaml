@@ -15,19 +15,10 @@ sync:
   toHost:
     ingresses:
       enabled: true
-    pods:
-      rewriteHosts:
-        enabled: true
 
 exportKubeConfig:
   secret:
     name: vcluster-dev-kubeconfig
-
-# ホストクラスタへ同期する Pod にデフォルトの resource limits を付与
-# Kyverno の require-resource-limits ポリシーを満たすため
-plugin:
-  limitRange:
-    enabled: true
 
 policies:
   limitRange:
