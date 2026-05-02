@@ -10,10 +10,7 @@ spec:
   source:
     repoURL: git@github.com:okccl/platform-gitops.git
     targetRevision: HEAD
-    path: platform
-    directory:
-      recurse: true
-      exclude: "{crossplane/config/*,policy/policies/*,ingress/config/*,secrets/config/*,gateway/config/*,gateway/envoy-gateway-crds/*,gateway/envoy-gateway/*,keycloak/db-config/*,keycloak/app-config/*,backstage/db-config/*,backstage/app-config/*,vcluster/*}"
+    path: platform/applications
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
