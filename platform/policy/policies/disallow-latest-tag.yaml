@@ -5,6 +5,7 @@ metadata:
   annotations:
     policies.kyverno.io/title: latestタグの禁止
     policies.kyverno.io/description: >-
+      policy-enforced: "true" ラベルが付いた namespace で
       イメージタグにlatestを使用すること、またはタグを省略することを禁止します。
       明示的なバージョンタグを使用することでデプロイの再現性を確保します。
 spec:
@@ -17,12 +18,9 @@ spec:
           - resources:
               kinds:
                 - Pod
-      exclude:
-        any:
-          - resources:
               namespaceSelector:
                 matchLabels:
-                  platform-managed: "true"
+                  policy-enforced: "true"
       validate:
         message: "latestタグ・タグ未指定のイメージは使用できません。明示的なバージョンタグを指定してください。"
         deny:

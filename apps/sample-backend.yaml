@@ -43,3 +43,4 @@ spec:
     managedNamespaceMetadata:
       labels:
         goldilocks.fairwinds.com/enabled: "true"
+        policy-enforced: "true"

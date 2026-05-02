@@ -5,6 +5,7 @@ metadata:
   annotations:
     policies.kyverno.io/title: リソース制限の必須化
     policies.kyverno.io/description: >-
+      policy-enforced: "true" ラベルが付いた namespace の
       すべてのコンテナにCPU・Memoryのlimitsが設定されていることを強制します。
       設定がない場合、ノードのリソースを使い果たすリスクがあります。
 spec:
@@ -17,12 +18,9 @@ spec:
           - resources:
               kinds:
                 - Pod
-      exclude:
-        any:
-          - resources:
               namespaceSelector:
                 matchLabels:
-                  platform-managed: "true"
+                  policy-enforced: "true"
       validate:
         message: "すべてのコンテナにresources.limitsのcpuとmemoryを設定してください。"
         pattern:

@@ -5,7 +5,8 @@ metadata:
   annotations:
     policies.kyverno.io/title: デフォルトラベルの自動付与
     policies.kyverno.io/description: >-
-      すべてのPodに app.kubernetes.io/managed-by: platform ラベルを自動付与します。
+      policy-enforced: "true" ラベルが付いた namespace の Pod に
+      app.kubernetes.io/managed-by: platform ラベルを自動付与します。
       プラットフォームが管理するリソースの識別・フィルタリングに使用します。
 spec:
   rules:
@@ -15,12 +16,9 @@ spec:
           - resources:
               kinds:
                 - Pod
-      exclude:
-        any:
-          - resources:
               namespaceSelector:
                 matchLabels:
-                  platform-managed: "true"
+                  policy-enforced: "true"
       mutate:
         patchStrategicMerge:
           metadata:
