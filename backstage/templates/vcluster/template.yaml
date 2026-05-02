@@ -1,0 +1,61 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: vcluster-template
+  title: vCluster 払い出し
+  description: 開発用の仮想クラスタ（vCluster）を払い出します
+  tags:
+    - vcluster
+    - kubernetes
+    - platform
+spec:
+  owner: platform-team
+  type: infrastructure
+
+  parameters:
+    - title: 仮想クラスタの設定
+      required:
+        - name
+        - owner
+      properties:
+        name:
+          title: クラスタ名
+          type: string
+          description: 仮想クラスタの名前（例：dev-alice）
+          pattern: '^[a-z0-9][a-z0-9-]{1,28}[a-z0-9]$'
+          ui:autofocus: true
+        owner:
+          title: オーナー
+          type: string
+          description: このクラスタを管理するチームまたはユーザー
+          ui:field: OwnerPicker
+          ui:options:
+            catalogFilter:
+              kind: Group
+
+  steps:
+    - id: fetch-template
+      name: テンプレートの取得
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          name: ${{ parameters.name }}
+          owner: ${{ parameters.owner }}
+
+    - id: publish
+      name: GitOps リポジトリへ PR を作成
+      action: publish:github:pull-request
+      input:
+        repoUrl: github.com?repo=platform-gitops&owner=okccl
+        title: "feat(vcluster): add vcluster-${{ parameters.name }}"
+        branchName: "vcluster/${{ parameters.name }}"
+        description: |
+          仮想クラスタ `${{ parameters.name }}` の払い出しリクエストです。
+          オーナー: ${{ parameters.owner }}
+        targetPath: platform/vcluster/instances
+
+  output:
+    links:
+      - title: Pull Request
+        url: ${{ steps.publish.output.remoteUrl }}
