@@ -46,6 +46,9 @@ backstage:
               resolvers:
                 - resolver: emailMatchingUserEntityProfileEmail
 
+    notifications:
+      enabled: false
+
   extraEnvVars:
     - name: BACKEND_SECRET
       valueFrom:
