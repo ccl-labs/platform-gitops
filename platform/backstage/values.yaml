@@ -49,6 +49,18 @@ backstage:
     notifications:
       enabled: false
 
+    integrations:
+      github:
+        - host: github.com
+          token: ${GITHUB_TOKEN}
+
+    catalog:
+      locations:
+        - type: url
+          target: https://github.com/okccl/platform-gitops/blob/main/backstage/templates/vcluster/template.yaml
+          rules:
+            - allow: [Template]
+
   extraEnvVars:
     - name: BACKEND_SECRET
       valueFrom:
@@ -60,6 +72,11 @@ backstage:
         secretKeyRef:
           name: backstage-secret
           key: KEYCLOAK_CLIENT_SECRET
+    - name: GITHUB_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: backstage-secret
+          key: GITHUB_TOKEN
     - name: POSTGRES_HOST
       value: "backstage-db-rw.backstage.svc.cluster.local"
     - name: POSTGRES_PORT
