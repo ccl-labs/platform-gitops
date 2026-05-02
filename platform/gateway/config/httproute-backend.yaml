@@ -1,6 +1,8 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
   name: sample-backend
   namespace: envoy-gateway-system
 spec:
