@@ -29,3 +29,18 @@ policies:
     defaultRequest:
       cpu: "100m"
       memory: "128Mi"
+  resourceQuota:
+    enabled: true
+    quota:
+      limits.cpu: "4"
+      limits.memory: 8Gi
+      requests.cpu: "2"
+      requests.memory: 4Gi
+      requests.storage: 20Gi
+      count/pods: "20"
+      count/services: "20"
+      count/secrets: "100"
+      count/configmaps: "100"
+      count/persistentvolumeclaims: "20"
+      services.nodeports: "0"
+      services.loadbalancers: "1"
