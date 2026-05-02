@@ -44,3 +44,7 @@ spec:
         - /spec/data/1/remoteRef/decodingStrategy
         - /spec/data/1/remoteRef/metadataPolicy
         - /spec/data/1/remoteRef/nullBytePolicy
+        - /spec/data/2/remoteRef/conversionStrategy
+        - /spec/data/2/remoteRef/decodingStrategy
+        - /spec/data/2/remoteRef/metadataPolicy
+        - /spec/data/2/remoteRef/nullBytePolicy
