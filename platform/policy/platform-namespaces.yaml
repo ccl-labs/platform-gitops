@@ -119,3 +119,17 @@ metadata:
   name: keda
   labels:
     platform-managed: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: keycloak
+  labels:
+    platform-managed: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: backstage
+  labels:
+    platform-managed: "true"
