@@ -33,12 +33,30 @@ backstage:
             require: true
             rejectUnauthorized: false
 
+    auth:
+      environment: development
+      providers:
+        oidc:
+          development:
+            metadataUrl: http://keycloak.platform.local/realms/platform/.well-known/openid-configuration
+            clientId: backstage
+            clientSecret: ${KEYCLOAK_CLIENT_SECRET}
+            prompt: auto
+            signIn:
+              resolvers:
+                - resolver: emailMatchingUserEntityProfileEmail
+
   extraEnvVars:
     - name: BACKEND_SECRET
       valueFrom:
         secretKeyRef:
           name: backstage-secret
           key: BACKEND_SECRET
+    - name: KEYCLOAK_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: backstage-secret
+          key: KEYCLOAK_CLIENT_SECRET
     - name: POSTGRES_HOST
       value: "backstage-db-rw.backstage.svc.cluster.local"
     - name: POSTGRES_PORT
