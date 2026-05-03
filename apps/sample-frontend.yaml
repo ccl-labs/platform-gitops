@@ -17,6 +17,9 @@ spec:
     - repoURL: git@github.com:okccl/platform-gitops.git
       targetRevision: main
       ref: values
+    - repoURL: git@github.com:okccl/platform-gitops.git
+      targetRevision: main
+      path: apps/sample-frontend/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: sample-app
