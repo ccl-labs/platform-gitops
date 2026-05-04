@@ -32,3 +32,8 @@ spec:
         - .spec.rules[]?.backendRefs[]?.group
         - .spec.rules[]?.backendRefs[]?.kind
         - .spec.rules[]?.backendRefs[]?.weight
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      jqPathExpressions:
+        - .spec.listeners[]?.tls?.certificateRefs[]?.group
+        - .spec.listeners[]?.tls?.certificateRefs[]?.kind
