@@ -9,6 +9,7 @@ spec:
   parentRefs:
     - name: eg
       namespace: envoy-gateway-system
+      sectionName: https
   hostnames:
     - "rollouts.platform.local"
   rules:
@@ -32,6 +33,7 @@ spec:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       namespace: envoy-gateway-system
+      sectionName: https
   to:
     - group: ""
       kind: Service

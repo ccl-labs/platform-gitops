@@ -9,6 +9,7 @@ spec:
   parentRefs:
     - name: eg
       namespace: envoy-gateway-system
+      sectionName: https
   hostnames:
     - "keycloak.platform.local"
   rules:

@@ -12,7 +12,7 @@ spec:
   source:
     repoURL: git@github.com:okccl/platform-gitops.git
     targetRevision: HEAD
-    path: platform/ingress/config
+    path: platform/cert-manager/config
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
