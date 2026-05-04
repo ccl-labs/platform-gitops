@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: platform
+  name: root-2-auth
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,9 +10,7 @@ spec:
   source:
     repoURL: git@github.com:okccl/platform-gitops.git
     targetRevision: HEAD
-    path: platform/applications/platform
-    directory:
-      exclude: vcluster-dev.yaml
+    path: platform/applications/auth-stack
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
