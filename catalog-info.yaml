@@ -1,0 +1,29 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: platform
+  description: Platform Engineering ポートフォリオ基盤
+  annotations:
+    github.com/project-slug: okccl/platform-gitops
+  tags:
+    - kubernetes
+    - gitops
+spec:
+  owner: user:platform-admin
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: platform-gitops
+  description: ArgoCD による GitOps 管理・全プラットフォームコンポーネントの宣言
+  annotations:
+    github.com/project-slug: okccl/platform-gitops
+  tags:
+    - argocd
+    - gitops
+    - kubernetes
+spec:
+  type: library
+  lifecycle: production
+  owner: user:platform-admin
+  system: platform
