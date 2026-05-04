@@ -2,7 +2,7 @@ configs:
   params:
     server.insecure: "true"
   cm:
-    url: "http://argocd.platform.local"
+    url: "https://argocd.platform.local"
     oidc.config: |
       name: Keycloak
       issuer: https://keycloak.platform.local/auth/realms/platform
