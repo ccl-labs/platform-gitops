@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-config-cli-realm
+  namespace: keycloak
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+data:
+  platform.yaml: |
+    realm: platform
+    enabled: true
+    displayName: Platform
+
+    clientScopes:
+      - name: groups
+        protocol: openid-connect
+        attributes:
+          include.in.token.scope: "true"
+        protocolMappers:
+          - name: groups
+            protocol: openid-connect
+            protocolMapper: oidc-group-membership-mapper
+            config:
+              full.path: "false"
+              id.token.claim: "true"
+              access.token.claim: "true"
+              claim.name: groups
+              userinfo.token.claim: "true"
+
+    clients:
+      - clientId: argocd
+        enabled: true
+        protocol: openid-connect
+        publicClient: false
+        secret: $(ARGOCD_CLIENT_SECRET)
+        redirectUris:
+          - "https://argocd.platform.local/auth/callback"
+        webOrigins:
+          - "https://argocd.platform.local"
+        defaultClientScopes:
+          - openid
+          - profile
+          - email
+          - groups
+
+      - clientId: backstage
+        enabled: true
+        protocol: openid-connect
+        publicClient: false
+        secret: $(BACKSTAGE_CLIENT_SECRET)
+        redirectUris:
+          - "https://backstage.platform.local/api/auth/oidc/handler/frame"
+        webOrigins:
+          - "https://backstage.platform.local"
+        defaultClientScopes:
+          - openid
+          - profile
+          - email
+          - groups
+
+    groups:
+      - name: argocd-admins
+
+    users:
+      - username: platform-admin
+        enabled: true
+        email: platform-admin@platform.local
+        firstName: Platform
+        lastName: Admin
+        credentials:
+          - type: password
+            value: $(PLATFORM_ADMIN_PASSWORD)
+            temporary: false
+        groups:
+          - argocd-admins
