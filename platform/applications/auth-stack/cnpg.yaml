@@ -15,11 +15,6 @@ spec:
       valuesObject:
         monitoring:
           podMonitorEnabled: true
-        webhook:
-          mutating:
-            create: false
-          validating:
-            create: false
         resources:
           limits:
             cpu: 500m
