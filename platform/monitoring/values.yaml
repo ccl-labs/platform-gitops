@@ -42,3 +42,8 @@ alertmanager:
       limits:
         memory: 128Mi
         cpu: 100m
+prometheusOperator:
+  admissionWebhooks:
+    enabled: false
+    patch:
+      enabled: false

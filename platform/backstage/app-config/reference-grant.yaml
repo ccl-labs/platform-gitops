@@ -4,7 +4,7 @@ metadata:
   name: allow-gateway-to-backstage
   namespace: backstage
   annotations:
-    argocd.argoproj.io/sync-wave: "4"
+    argocd.argoproj.io/sync-wave: "-1"
 spec:
   from:
     - group: gateway.networking.k8s.io
