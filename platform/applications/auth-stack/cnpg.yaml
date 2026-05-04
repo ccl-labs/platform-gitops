@@ -16,7 +16,7 @@ spec:
         monitoring:
           podMonitorEnabled: true
         webhook:
-          enabled: false
+          create: false
         resources:
           limits:
             cpu: 500m
