@@ -1,19 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: root
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  name: kyverno-policies
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
     repoURL: git@github.com:okccl/platform-gitops.git
-    targetRevision: HEAD
-    path: platform/group-roots
+    targetRevision: main
+    path: platform/policy/policies
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: kyverno
   syncPolicy:
     automated:
       prune: true

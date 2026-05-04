@@ -1,26 +1,30 @@
-# platform-gitops/platform/monitoring/application.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kube-prometheus-stack
+  name: keycloak
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-wave: "4"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   sources:
-    - repoURL: https://prometheus-community.github.io/helm-charts
-      chart: kube-prometheus-stack
-      targetRevision: 83.6.0
+    - repoURL: https://codecentric.github.io/helm-charts
+      chart: keycloakx
+      targetRevision: 7.1.11
       helm:
         valueFiles:
-          - $values/platform/monitoring/values.yaml
+          - $values/platform/keycloak/values.yaml
     - repoURL: git@github.com:okccl/platform-gitops.git
       targetRevision: main
       ref: values
+    - repoURL: git@github.com:okccl/platform-gitops.git
+      targetRevision: main
+      path: platform/keycloak/app-config
   destination:
     server: https://kubernetes.default.svc
-    namespace: monitoring
+    namespace: keycloak
   syncPolicy:
     automated:
       prune: true

@@ -1,30 +1,21 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: keycloak-config-cli
+  name: backstage-db
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "6"
+    argocd.argoproj.io/sync-wave: "2"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  sources:
-    - repoURL: https://jkroepke.github.io/helm-charts
-      chart: keycloak-config-cli
-      targetRevision: 1.3.7
-      helm:
-        valueFiles:
-          - $values/platform/keycloak/config-cli-values.yaml
-    - repoURL: git@github.com:okccl/platform-gitops.git
-      targetRevision: main
-      ref: values
-    - repoURL: git@github.com:okccl/platform-gitops.git
-      targetRevision: main
-      path: platform/keycloak/config-cli
+  source:
+    repoURL: git@github.com:okccl/platform-gitops.git
+    targetRevision: main
+    path: platform/backstage/db-config
   destination:
     server: https://kubernetes.default.svc
-    namespace: keycloak
+    namespace: backstage
   syncPolicy:
     automated:
       prune: true
@@ -44,7 +35,3 @@ spec:
         - /spec/data/1/remoteRef/decodingStrategy
         - /spec/data/1/remoteRef/metadataPolicy
         - /spec/data/1/remoteRef/nullBytePolicy
-        - /spec/data/2/remoteRef/conversionStrategy
-        - /spec/data/2/remoteRef/decodingStrategy
-        - /spec/data/2/remoteRef/metadataPolicy
-        - /spec/data/2/remoteRef/nullBytePolicy

@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: crossplane-config
+  name: cert-manager-config
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "6"
+    argocd.argoproj.io/sync-wave: "3"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -12,10 +12,10 @@ spec:
   source:
     repoURL: git@github.com:okccl/platform-gitops.git
     targetRevision: HEAD
-    path: platform/crossplane/config
+    path: platform/cert-manager/config
   destination:
     server: https://kubernetes.default.svc
-    namespace: crossplane-system
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
@@ -23,4 +23,3 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
-      - SkipDryRunOnMissingResource=true

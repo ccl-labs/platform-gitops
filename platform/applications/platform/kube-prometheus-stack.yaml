@@ -1,25 +1,26 @@
+# platform-gitops/platform/monitoring/application.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  annotations:
-    argocd.argoproj.io/sync-wave: "3"
-  name: alloy
+  name: kube-prometheus-stack
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   project: default
   sources:
-    - repoURL: https://grafana.github.io/helm-charts
-      chart: alloy
-      targetRevision: 1.7.0
+    - repoURL: https://prometheus-community.github.io/helm-charts
+      chart: kube-prometheus-stack
+      targetRevision: 83.6.0
       helm:
         valueFiles:
-          - $values/platform/logging/alloy-values.yaml
+          - $values/platform/monitoring/values.yaml
     - repoURL: git@github.com:okccl/platform-gitops.git
       targetRevision: main
       ref: values
   destination:
     server: https://kubernetes.default.svc
-    namespace: logging
+    namespace: monitoring
   syncPolicy:
     automated:
       prune: true

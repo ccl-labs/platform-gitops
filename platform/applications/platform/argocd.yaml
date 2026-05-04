@@ -1,27 +1,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: vcluster-dev
+  name: argocd
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-wave: "1"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   sources:
-    - repoURL: https://charts.loft.sh
-      chart: vcluster
-      targetRevision: 0.24.1
+    - repoURL: https://argoproj.github.io/argo-helm
+      chart: argo-cd
+      targetRevision: 9.5.2
       helm:
         valueFiles:
-          - $values/platform/vcluster/values.yaml
+          - $values/platform/argocd/values.yaml
     - repoURL: git@github.com:okccl/platform-gitops.git
-      targetRevision: main
+      targetRevision: HEAD
       ref: values
   destination:
     server: https://kubernetes.default.svc
-    namespace: vcluster-dev
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
@@ -29,9 +29,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
-  ignoreDifferences:
-    - group: apps
-      kind: StatefulSet
-      jsonPointers:
-        - /spec/volumeClaimTemplates/0/apiVersion
-        - /spec/volumeClaimTemplates/0/kind
+      - RespectIgnoreDifferences=true

@@ -1,29 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: external-secrets-config
+  name: keycloak-db
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "4"
+    argocd.argoproj.io/sync-wave: "3"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
     repoURL: git@github.com:okccl/platform-gitops.git
-    targetRevision: HEAD
-    path: platform/secrets/config
+    targetRevision: main
+    path: platform/keycloak/db-config
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: keycloak
   ignoreDifferences:
-    - group: external-secrets.io
-      kind: ClusterExternalSecret
-      jqPathExpressions:
-        - .spec.externalSecretSpec.data[].remoteRef.conversionStrategy
-        - .spec.externalSecretSpec.data[].remoteRef.decodingStrategy
-        - .spec.externalSecretSpec.data[].remoteRef.metadataPolicy
-        - .spec.externalSecretSpec.data[].remoteRef.nullBytePolicy
     - group: external-secrets.io
       kind: ExternalSecret
       jqPathExpressions:

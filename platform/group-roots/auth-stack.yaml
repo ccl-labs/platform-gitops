@@ -1,8 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: root
+  name: auth-stack
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -10,7 +12,7 @@ spec:
   source:
     repoURL: git@github.com:okccl/platform-gitops.git
     targetRevision: HEAD
-    path: platform/group-roots
+    path: platform/applications/auth-stack
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

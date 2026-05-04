@@ -2,24 +2,24 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   annotations:
-    argocd.argoproj.io/sync-wave: "3"
-  name: loki
+    argocd.argoproj.io/sync-wave: "1"
+  name: tempo
   namespace: argocd
 spec:
   project: default
   sources:
-    - repoURL: https://grafana-community.github.io/helm-charts
-      chart: loki
-      targetRevision: 6.55.0
+    - repoURL: https://grafana.github.io/helm-charts
+      chart: tempo
+      targetRevision: 1.24.4
       helm:
         valueFiles:
-          - $values/platform/logging/loki-values.yaml
+          - $values/platform/tracing/tempo-values.yaml
     - repoURL: git@github.com:okccl/platform-gitops.git
       targetRevision: main
       ref: values
   destination:
     server: https://kubernetes.default.svc
-    namespace: logging
+    namespace: tracing
   syncPolicy:
     automated:
       prune: true

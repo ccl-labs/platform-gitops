@@ -1,30 +1,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: keycloak
+  name: vcluster-dev
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-wave: "1"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   sources:
-    - repoURL: https://codecentric.github.io/helm-charts
-      chart: keycloakx
-      targetRevision: 7.1.11
+    - repoURL: https://charts.loft.sh
+      chart: vcluster
+      targetRevision: 0.24.1
       helm:
         valueFiles:
-          - $values/platform/keycloak/values.yaml
+          - $values/platform/vcluster/values.yaml
     - repoURL: git@github.com:okccl/platform-gitops.git
       targetRevision: main
       ref: values
-    - repoURL: git@github.com:okccl/platform-gitops.git
-      targetRevision: main
-      path: platform/keycloak/app-config
   destination:
     server: https://kubernetes.default.svc
-    namespace: keycloak
+    namespace: vcluster-dev
   syncPolicy:
     automated:
       prune: true
@@ -32,3 +29,9 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+  ignoreDifferences:
+    - group: apps
+      kind: StatefulSet
+      jsonPointers:
+        - /spec/volumeClaimTemplates/0/apiVersion
+        - /spec/volumeClaimTemplates/0/kind
