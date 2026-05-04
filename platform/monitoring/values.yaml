@@ -47,3 +47,5 @@ prometheusOperator:
     enabled: false
     patch:
       enabled: false
+  tls:
+    enabled: false
