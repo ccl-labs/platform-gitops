@@ -1,0 +1,20 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+  name: http-to-https-redirect
+  namespace: envoy-gateway-system
+spec:
+  parentRefs:
+    - name: eg
+      namespace: envoy-gateway-system
+      sectionName: http
+  hostnames:
+    - "*.platform.local"
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 301
