@@ -1,9 +1,8 @@
 image:
-  # keycloakx chart が使用している Keycloak のバージョンに合わせる
   tag: "latest-26"
 
-# Helm hook を無効化し、ArgoCD の sync-wave で制御する
-annotations: {}
+annotations:
+  argocd.argoproj.io/sync-wave: "6"
 
 env:
   KEYCLOAK_URL: http://keycloak-keycloakx-http.keycloak.svc.cluster.local:80
