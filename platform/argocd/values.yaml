@@ -13,7 +13,17 @@ configs:
         - profile
         - email
         - groups
-      insecureSkipVerify: true
+      rootCA: |
+        -----BEGIN CERTIFICATE-----
+        MIIBajCCARCgAwIBAgIUDnuhxtWJ0GA9aR4T9I8w0zSekcAwCgYIKoZIzj0EAwIw
+        EzERMA8GA1UEAxMIbG9jYWwtY2EwHhcNMjYwNTAzMDAzNzIxWhcNMjYwODAxMDAz
+        NzIxWjATMREwDwYDVQQDEwhsb2NhbC1jYTBZMBMGByqGSM49AgEGCCqGSM49AwEH
+        A0IABArTrS6tLya/M4viFJNyHXbC+zCAuVFWNchSFSoT1Wob1fIeIF7jctNHVSg3
+        9Q5yfdjzrVAnU/090MB0R4vsmECjQjBAMA4GA1UdDwEB/wQEAwICpDAPBgNVHRMB
+        Af8EBTADAQH/MB0GA1UdDgQWBBQK64gBeoJYcN6P+TNs6z8EhtJmLTAKBggqhkjO
+        PQQDAgNIADBFAiBffCitzSreKWkiZZcewAdeGf2l5pILQYEED6Tp5YyS2gIhAIVQ
+        gGa6VqGYYVnpy/bUThi9aGeLSWuVzLJV8N4CdMUS
+        -----END CERTIFICATE-----
   rbac:
     policy.csv: |
       g, argocd-admins, role:admin
