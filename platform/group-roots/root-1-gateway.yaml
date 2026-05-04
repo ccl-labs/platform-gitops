@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: git@github.com:okccl/platform-gitops.git
     targetRevision: HEAD
-    path: platform/applications/gateway-stack
+    path: platform/applications/root-1-gateway
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
