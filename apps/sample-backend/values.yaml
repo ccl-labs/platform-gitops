@@ -3,7 +3,7 @@ app:
   version: "1.0.0"
 image:
   repository: ghcr.io/okccl/sample-backend
-  tag:   7c47503
+  tag:   b22be87
   pullPolicy: IfNotPresent
   pullSecretName: ghcr-pull-secret
 containerPort: 8000
