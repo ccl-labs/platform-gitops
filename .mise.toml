@@ -1,3 +1,1 @@
-# 共通ツールは ../platform-infra/.mise.toml で管理
-# クローン時は platform-infra と同階層に配置すること
-extends = ["../platform-infra/.mise.toml"]
+../platform-infra/.mise.toml
