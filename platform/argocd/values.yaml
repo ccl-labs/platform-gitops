@@ -3,6 +3,7 @@ configs:
     server.insecure: "true"
   cm:
     url: "https://argocd.platform.local"
+    kustomize.buildOptions: "--enable-alpha-plugins --enable-exec"
     oidc.config: |
       name: Keycloak
       issuer: https://keycloak.platform.local/auth/realms/platform
@@ -21,3 +22,30 @@ configs:
     scopes: "[groups]"
 ingress:
   enabled: false
+repoServer:
+  env:
+    - name: XDG_CONFIG_HOME
+      value: /.config
+    - name: SOPS_AGE_KEY_FILE
+      value: /.config/sops/age/keys.txt
+  volumes:
+    - name: custom-tools
+      emptyDir: {}
+    - name: sops-age
+      secret:
+        secretName: sops-age
+  initContainers:
+    - name: install-ksops
+      image: viaductoss/ksops:v4.3.3
+      command: ["/bin/sh", "-c"]
+      args: ["cp /usr/local/bin/ksops /custom-tools/"]
+      volumeMounts:
+        - name: custom-tools
+          mountPath: /custom-tools
+  volumeMounts:
+    - name: custom-tools
+      mountPath: /.config/kustomize/plugin/viaduct.ai/v1/ksops/ksops
+      subPath: ksops
+    - name: sops-age
+      mountPath: /.config/sops/age
+      readOnly: true
