@@ -32,6 +32,9 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+    managedNamespaceMetadata:
+      labels:
+        ghcr-pull-secret: enabled
   ignoreDifferences:
     - group: external-secrets.io
       kind: ExternalSecret
