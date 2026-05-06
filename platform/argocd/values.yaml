@@ -38,7 +38,11 @@ configs:
       return hs
   rbac:
     policy.csv: |
-      g, argocd-admins, role:admin
+      p, role:platform-team, applications, *, */*, allow
+      p, role:platform-team, repositories, *, *, allow
+      p, role:app-developer, applications, get, sample-apps/*, allow
+      g, platform-team, role:platform-team
+      g, app-developer, role:app-developer
     policy.default: role:readonly
     scopes: "[groups]"
 ingress:
