@@ -68,6 +68,10 @@ backstage:
           rules:
             - allow: [System, Component]
         - type: url
+          target: https://github.com/okccl/platform-gitops/blob/main/backstage/org.yaml
+          rules:
+            - allow: [User, Group]
+        - type: url
           target: https://github.com/okccl/sample-backend/blob/main/catalog-info.yaml
           rules:
             - allow: [Component]
