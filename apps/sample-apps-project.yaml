@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: sample-apps
+  namespace: argocd
+spec:
+  sourceRepos:
+    - git@github.com:okccl/sample-backend.git
+    - git@github.com:okccl/sample-frontend.git
+    - git@github.com:okccl/platform-charts.git
+    - git@github.com:okccl/platform-gitops.git
+  destinations:
+    - namespace: sample-app
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist: []
