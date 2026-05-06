@@ -9,16 +9,16 @@ backstage:
   appConfig:
     app:
       title: Platform Backstage
-      baseUrl: http://backstage.platform.local
+      baseUrl: https://backstage.platform.local
     backend:
-      baseUrl: http://backstage.platform.local
+      baseUrl: https://backstage.platform.local
       listen:
         port: 7007
         host: 0.0.0.0
       csp:
         upgrade-insecure-requests: false
       cors:
-        origin: http://backstage.platform.local
+        origin: https://backstage.platform.local
         methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
         credentials: true
       database:
