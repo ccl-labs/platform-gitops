@@ -59,7 +59,8 @@ data:
           - groups
 
     groups:
-      - name: argocd-admins
+      - name: platform-team
+      - name: app-developer
 
     users:
       - username: platform-admin
@@ -72,4 +73,15 @@ data:
             value: $(PLATFORM_ADMIN_PASSWORD)
             temporary: false
         groups:
-          - argocd-admins
+          - platform-team
+      - username: app-developer
+        enabled: true
+        email: app-developer@platform.local
+        firstName: App
+        lastName: Developer
+        credentials:
+          - type: password
+            value: $(APP_DEVELOPER_PASSWORD)
+            temporary: false
+        groups:
+          - app-developer
