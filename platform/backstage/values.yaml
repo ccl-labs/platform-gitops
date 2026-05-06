@@ -60,6 +60,14 @@ backstage:
                 - resolver: usernameMatchingUserEntityName
     notifications:
       enabled: false
+    proxy:
+      endpoints:
+        '/argocd/api':
+          target: https://argocd.platform.local
+          changeOrigin: true
+          secure: false
+          headers:
+            Authorization: Bearer ${ARGOCD_TOKEN}
     integrations:
       github:
         - host: github.com
@@ -135,6 +143,11 @@ backstage:
         secretKeyRef:
           name: backstage-secret
           key: GITHUB_APP_PRIVATE_KEY
+    - name: ARGOCD_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: backstage-secret
+          key: ARGOCD_TOKEN
     - name: POSTGRES_HOST
       value: "backstage-db-rw.backstage.svc.cluster.local"
     - name: POSTGRES_PORT

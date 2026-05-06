@@ -4,6 +4,7 @@ configs:
   cm:
     url: "https://argocd.platform.local"
     kustomize.buildOptions: "--enable-alpha-plugins --enable-exec"
+    accounts.backstage: apiKey
     oidc.config: |
       name: Keycloak
       issuer: https://keycloak.platform.local/auth/realms/platform
@@ -41,8 +42,10 @@ configs:
       p, role:platform-team, applications, *, */*, allow
       p, role:platform-team, repositories, *, *, allow
       p, role:app-developer, applications, get, sample-apps/*, allow
+      p, role:backstage-reader, applications, get, */*, allow
       g, platform-team, role:platform-team
       g, app-developer, role:app-developer
+      g, backstage, role:backstage-reader
     policy.default: role:''
     scopes: "[groups]"
 ingress:
