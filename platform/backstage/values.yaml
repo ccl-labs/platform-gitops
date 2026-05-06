@@ -51,12 +51,23 @@ backstage:
             signIn:
               resolvers:
                 - resolver: emailMatchingUserEntityProfileEmail
+        github:
+          development:
+            clientId: ${GITHUB_APP_CLIENT_ID}
+            clientSecret: ${GITHUB_APP_CLIENT_SECRET}
+            signIn:
+              resolvers:
+                - resolver: usernameMatchingUserEntityName
     notifications:
       enabled: false
     integrations:
       github:
         - host: github.com
-          token: ${GITHUB_TOKEN}
+          apps:
+            - appId: ${GITHUB_APP_ID}
+              clientId: ${GITHUB_APP_CLIENT_ID}
+              clientSecret: ${GITHUB_APP_CLIENT_SECRET}
+              privateKey: ${GITHUB_APP_PRIVATE_KEY}
     catalog:
       locations:
         - type: url
@@ -104,11 +115,26 @@ backstage:
         secretKeyRef:
           name: backstage-secret
           key: KEYCLOAK_CLIENT_SECRET
-    - name: GITHUB_TOKEN
+    - name: GITHUB_APP_ID
       valueFrom:
         secretKeyRef:
           name: backstage-secret
-          key: GITHUB_TOKEN
+          key: GITHUB_APP_ID
+    - name: GITHUB_APP_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: backstage-secret
+          key: GITHUB_APP_CLIENT_ID
+    - name: GITHUB_APP_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: backstage-secret
+          key: GITHUB_APP_CLIENT_SECRET
+    - name: GITHUB_APP_PRIVATE_KEY
+      valueFrom:
+        secretKeyRef:
+          name: backstage-secret
+          key: GITHUB_APP_PRIVATE_KEY
     - name: POSTGRES_HOST
       value: "backstage-db-rw.backstage.svc.cluster.local"
     - name: POSTGRES_PORT
