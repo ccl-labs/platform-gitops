@@ -38,6 +38,7 @@ data:
         webOrigins:
           - "https://argocd.platform.local"
         defaultClientScopes:
+          - basic
           - openid
           - profile
           - email
@@ -53,6 +54,7 @@ data:
         webOrigins:
           - "https://backstage.platform.local"
         defaultClientScopes:
+          - basic
           - openid
           - profile
           - email
