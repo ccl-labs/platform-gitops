@@ -37,6 +37,7 @@ backstage:
     auth:
       environment: development
       providers:
+        guest: {}
         oidc:
           development:
             metadataUrl: http://keycloak.platform.local/auth/realms/platform/.well-known/openid-configuration
