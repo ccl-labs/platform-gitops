@@ -40,7 +40,7 @@ backstage:
         guest: {}
         oidc:
           development:
-            metadataUrl: http://keycloak.platform.local/auth/realms/platform/.well-known/openid-configuration
+            metadataUrl: http://keycloak.platform.local/realms/platform/.well-known/openid-configuration
             clientId: backstage
             clientSecret: ${KEYCLOAK_CLIENT_SECRET}
             prompt: auto
