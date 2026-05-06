@@ -36,11 +36,6 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
       - ServerSideApply=true
       # ignoreDifferences のフィールドを sync 時にも上書きしない
       - RespectIgnoreDifferences=true
-    managedNamespaceMetadata:
-      labels:
-        goldilocks.fairwinds.com/enabled: "true"
-        policy-enforced: "true"

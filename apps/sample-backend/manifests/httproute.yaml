@@ -4,7 +4,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "4"
   name: sample-backend
-  namespace: envoy-gateway-system
+  namespace: sample-app
 spec:
   parentRefs:
     - name: eg
@@ -18,5 +18,4 @@ spec:
             value: /
       backendRefs:
         - name: sample-backend
-          namespace: sample-app
           port: 80
