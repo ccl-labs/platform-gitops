@@ -37,6 +37,8 @@ backstage:
         keys:
           - secret: ${BACKEND_SECRET}
     auth:
+      session:
+        secret: ${BACKEND_SECRET}
       environment: development
       providers:
         guest: {}
