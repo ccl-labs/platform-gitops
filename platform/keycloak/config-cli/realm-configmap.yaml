@@ -37,6 +37,8 @@ data:
           - "https://argocd.platform.local/auth/callback"
         webOrigins:
           - "https://argocd.platform.local"
+        optionalClientScopes:
+          - groups
 
       - clientId: backstage
         enabled: true
