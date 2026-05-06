@@ -43,7 +43,7 @@ configs:
       p, role:app-developer, applications, get, sample-apps/*, allow
       g, platform-team, role:platform-team
       g, app-developer, role:app-developer
-    policy.default: role:readonly
+    policy.default: role:''
     scopes: "[groups]"
 ingress:
   enabled: false
