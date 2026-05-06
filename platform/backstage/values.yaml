@@ -34,6 +34,8 @@ backstage:
             rejectUnauthorized: false
       auth:
         dangerouslyDisableDefaultAuthPolicy: true
+        keys:
+          - secret: ${BACKEND_SECRET}
     auth:
       environment: development
       providers:
