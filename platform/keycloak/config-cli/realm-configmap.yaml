@@ -37,13 +37,6 @@ data:
           - "https://argocd.platform.local/auth/callback"
         webOrigins:
           - "https://argocd.platform.local"
-        defaultClientScopes:
-          - basic
-          - openid
-          - profile
-          - email
-        optionalClientScopes:
-          - groups
 
       - clientId: backstage
         enabled: true
@@ -54,13 +47,6 @@ data:
           - "https://backstage.platform.local/api/auth/oidc/handler/frame"
         webOrigins:
           - "https://backstage.platform.local"
-        defaultClientScopes:
-          - basic
-          - openid
-          - profile
-          - email
-        optionalClientScopes:
-          - groups
 
     groups:
       - name: platform-team
