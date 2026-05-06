@@ -42,6 +42,7 @@ data:
           - openid
           - profile
           - email
+        optionalClientScopes:
           - groups
 
       - clientId: backstage
@@ -58,6 +59,7 @@ data:
           - openid
           - profile
           - email
+        optionalClientScopes:
           - groups
 
     groups:
