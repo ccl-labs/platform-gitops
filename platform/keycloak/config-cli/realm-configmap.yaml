@@ -49,6 +49,8 @@ data:
           - "https://backstage.platform.local/api/auth/oidc/handler/frame"
         webOrigins:
           - "https://backstage.platform.local"
+        optionalClientScopes:
+          - groups
 
     groups:
       - name: platform-team
