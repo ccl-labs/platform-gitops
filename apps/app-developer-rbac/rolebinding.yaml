@@ -6,7 +6,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: app-developer-sa
-    namespace: app-developer
+    namespace: sample-app
 roleRef:
   kind: ClusterRole
   name: app-developer

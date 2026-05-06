@@ -13,7 +13,7 @@ spec:
     path: apps/app-developer-rbac
   destination:
     server: https://kubernetes.default.svc
-    namespace: app-developer
+    namespace: sample-app
   syncPolicy:
     automated:
       prune: true
