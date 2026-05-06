@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: app-developer-binding
+  namespace: sample-app
+subjects:
+  - kind: ServiceAccount
+    name: app-developer-sa
+    namespace: app-developer
+roleRef:
+  kind: ClusterRole
+  name: app-developer
