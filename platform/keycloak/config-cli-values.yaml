@@ -31,6 +31,11 @@ extraEnv:
       secretKeyRef:
         name: keycloak-config-cli-secret
         key: PLATFORM_ADMIN_PASSWORD
+  - name: APP_DEVELOPER_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: keycloak-config-cli-secret
+        key: APP_DEVELOPER_PASSWORD
 
 existingConfigMap: keycloak-config-cli-realm
 
