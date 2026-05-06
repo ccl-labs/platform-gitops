@@ -1,5 +1,5 @@
 image:
-  tag: "latest-26"
+  tag: "6.5.0-26.5.4"
 
 annotations:
   argocd.argoproj.io/sync-wave: "6"
