@@ -62,7 +62,7 @@ backstage:
       enabled: false
     proxy:
       endpoints:
-        '/argocd/api':
+        '/argocd':
           target: https://argocd.platform.local
           changeOrigin: true
           secure: false
