@@ -17,6 +17,7 @@ backstage:
         host: 0.0.0.0
       csp:
         upgrade-insecure-requests: false
+        connect-src: ["'self'", 'https://api.github.com']
       cors:
         origin: https://backstage.platform.local
         methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
