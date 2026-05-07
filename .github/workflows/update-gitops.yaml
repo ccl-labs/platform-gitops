@@ -7,10 +7,16 @@ jobs:
   update-gitops:
     runs-on: ubuntu-latest
     steps:
+      - name: GitHub App トークンの生成
+        id: token
+        uses: actions/create-github-app-token@v3.1.1
+        with:
+          client-id: ${{ vars.GITOPS_APP_CLIENT_ID }}
+          private-key: ${{ secrets.GITOPS_APP_PRIVATE_KEY }}
       - name: platform-gitopsのチェックアウト
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITOPS_TOKEN }}
+          token: ${{ steps.token.outputs.token }}
 
       - name: アプリ名の特定
         id: app
@@ -54,4 +60,4 @@ jobs:
           echo "PR作成: ${PR_URL}"
           gh pr merge "${PR_URL}" --squash --delete-branch
         env:
-          GH_TOKEN: ${{ secrets.GITOPS_TOKEN }}
+          GH_TOKEN: ${{ steps.token.outputs.token }}
