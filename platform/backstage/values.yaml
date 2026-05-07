@@ -111,6 +111,10 @@ backstage:
           target: https://github.com/ccl-labs/platform-docs/blob/main/catalog-info.yaml
           rules:
             - allow: [Component]
+        - type: url
+          target: https://github.com/ccl-labs/platform-gitops/blob/main/backstage/catalog/platform-components.yaml
+          rules:
+            - allow: [Component]
   extraEnvVars:
     - name: NODE_TLS_REJECT_UNAUTHORIZED
       value: "0"
