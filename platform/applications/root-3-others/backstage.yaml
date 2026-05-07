@@ -51,3 +51,27 @@ spec:
         - /spec/data/2/remoteRef/decodingStrategy
         - /spec/data/2/remoteRef/metadataPolicy
         - /spec/data/2/remoteRef/nullBytePolicy
+        - /spec/data/3/remoteRef/conversionStrategy
+        - /spec/data/3/remoteRef/decodingStrategy
+        - /spec/data/3/remoteRef/metadataPolicy
+        - /spec/data/3/remoteRef/nullBytePolicy
+        - /spec/data/4/remoteRef/conversionStrategy
+        - /spec/data/4/remoteRef/decodingStrategy
+        - /spec/data/4/remoteRef/metadataPolicy
+        - /spec/data/4/remoteRef/nullBytePolicy
+        - /spec/data/5/remoteRef/conversionStrategy
+        - /spec/data/5/remoteRef/decodingStrategy
+        - /spec/data/5/remoteRef/metadataPolicy
+        - /spec/data/5/remoteRef/nullBytePolicy
+        - /spec/data/6/remoteRef/conversionStrategy
+        - /spec/data/6/remoteRef/decodingStrategy
+        - /spec/data/6/remoteRef/metadataPolicy
+        - /spec/data/6/remoteRef/nullBytePolicy
+        - /spec/data/7/remoteRef/conversionStrategy
+        - /spec/data/7/remoteRef/decodingStrategy
+        - /spec/data/7/remoteRef/metadataPolicy
+        - /spec/data/7/remoteRef/nullBytePolicy
+        - /spec/data/8/remoteRef/conversionStrategy
+        - /spec/data/8/remoteRef/decodingStrategy
+        - /spec/data/8/remoteRef/metadataPolicy
+        - /spec/data/8/remoteRef/nullBytePolicy
