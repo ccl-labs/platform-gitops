@@ -53,8 +53,8 @@ backstage:
                 - resolver: emailMatchingUserEntityProfileEmail
         github:
           development:
-            clientId: ${GITHUB_APP_CLIENT_ID}
-            clientSecret: ${GITHUB_APP_CLIENT_SECRET}
+            clientId: ${GITHUB_OAUTH_CLIENT_ID}
+            clientSecret: ${GITHUB_OAUTH_CLIENT_SECRET}
             signIn:
               resolvers:
                 - resolver: usernameMatchingUserEntityName
@@ -143,6 +143,16 @@ backstage:
         secretKeyRef:
           name: backstage-secret
           key: GITHUB_APP_PRIVATE_KEY
+    - name: GITHUB_OAUTH_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: backstage-secret
+          key: GITHUB_OAUTH_CLIENT_ID
+    - name: GITHUB_OAUTH_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: backstage-secret
+          key: GITHUB_OAUTH_CLIENT_SECRET
     - name: ARGOCD_TOKEN
       valueFrom:
         secretKeyRef:
