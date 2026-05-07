@@ -8,16 +8,16 @@ metadata:
 spec:
   project: sample-apps
   sources:
-    - repoURL: git@github.com:okccl/platform-charts.git
+    - repoURL: git@github.com:ccl-labs/platform-charts.git
       targetRevision: main
       path: charts/sample-backend
       helm:
         valueFiles:
           - $values/apps/sample-backend/values.yaml
-    - repoURL: git@github.com:okccl/platform-gitops.git
+    - repoURL: git@github.com:ccl-labs/platform-gitops.git
       targetRevision: main
       ref: values
-    - repoURL: git@github.com:okccl/platform-gitops.git
+    - repoURL: git@github.com:ccl-labs/platform-gitops.git
       targetRevision: main
       path: apps/sample-backend/manifests
   destination:

@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: git@github.com:okccl/platform-gitops.git
+    repoURL: git@github.com:ccl-labs/platform-gitops.git
     targetRevision: HEAD
     path: platform/applications/root-1-gateway
   destination:

@@ -16,10 +16,10 @@ spec:
       helm:
         valueFiles:
           - $values/platform/keycloak/config-cli-values.yaml
-    - repoURL: git@github.com:okccl/platform-gitops.git
+    - repoURL: git@github.com:ccl-labs/platform-gitops.git
       targetRevision: main
       ref: values
-    - repoURL: git@github.com:okccl/platform-gitops.git
+    - repoURL: git@github.com:ccl-labs/platform-gitops.git
       targetRevision: main
       path: platform/keycloak/config-cli
   destination:

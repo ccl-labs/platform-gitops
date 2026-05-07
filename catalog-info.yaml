@@ -4,7 +4,7 @@ metadata:
   name: platform
   description: Platform Engineering ポートフォリオ基盤
   annotations:
-    github.com/project-slug: okccl/platform-gitops
+    github.com/project-slug: ccl-labs/platform-gitops
   tags:
     - kubernetes
     - gitops
@@ -17,7 +17,7 @@ metadata:
   name: platform-gitops
   description: ArgoCD による GitOps 管理・全プラットフォームコンポーネントの宣言
   annotations:
-    github.com/project-slug: okccl/platform-gitops
+    github.com/project-slug: ccl-labs/platform-gitops
   tags:
     - argocd
     - gitops
