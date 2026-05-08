@@ -8,23 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
     steps:
       - uses: actions/checkout@v4
-
-      - name: GHCR ログイン
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ "${{" }} github.actor ${{ "}}" }}
-          password: ${{ "${{" }} secrets.GITHUB_TOKEN ${{ "}}" }}
-
-      - name: Docker ビルド & プッシュ
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/ccl-labs/${{ values.appName }}-frontend:${{ "${{" }} github.sha ${{ "}}" }}
 
       - name: GitHub App トークンの生成
         id: token
@@ -32,7 +17,21 @@ jobs:
         with:
           client-id: ${{ "${{" }} vars.GITOPS_APP_CLIENT_ID ${{ "}}" }}
           private-key: ${{ "${{" }} secrets.GITOPS_APP_PRIVATE_KEY ${{ "}}" }}
-          repositories: platform-gitops
+          owner: ccl-labs
+
+      - name: GHCR ログイン
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ "${{" }} github.actor ${{ "}}" }}
+          password: ${{ "${{" }} steps.token.outputs.token ${{ "}}" }}
+
+      - name: Docker ビルド & プッシュ
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/ccl-labs/${{ values.appName }}-frontend:${{ "${{" }} github.sha ${{ "}}" }}
 
       - name: platform-gitops に dispatch
         run: |
