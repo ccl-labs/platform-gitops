@@ -23,9 +23,17 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: sample-app
+  ignoreDifferences:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      jqPathExpressions:
+        # Gateway API が parentRefs にデフォルト補完するフィールドを無視
+        - .spec.parentRefs[].group
+        - .spec.parentRefs[].kind
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - ServerSideApply=true
+      - RespectIgnoreDifferences=true
