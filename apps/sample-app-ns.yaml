@@ -5,3 +5,4 @@ metadata:
   labels:
     goldilocks.fairwinds.com/enabled: "true"
     policy-enforced: "true"
+    ghcr-pull-secret: enabled
