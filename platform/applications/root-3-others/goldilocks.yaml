@@ -15,7 +15,7 @@ spec:
       helm:
         valueFiles:
           - $values/platform/goldilocks/values.yaml
-    - repoURL: git@github.com:ccl-labs/platform-gitops.git
+    - repoURL: https://github.com/ccl-labs/platform-gitops.git
       targetRevision: main
       ref: values
   destination:

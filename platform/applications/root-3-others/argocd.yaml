@@ -16,7 +16,7 @@ spec:
       helm:
         valueFiles:
           - $values/platform/argocd/values.yaml
-    - repoURL: git@github.com:ccl-labs/platform-gitops.git
+    - repoURL: https://github.com/ccl-labs/platform-gitops.git
       targetRevision: HEAD
       ref: values
   destination:
