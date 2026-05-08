@@ -1,0 +1,7 @@
+app:
+  name: test-app-frontend
+image:
+  repository: ghcr.io/ccl-labs/test-app-frontend
+  tag: latest
+  pullSecretName: ghcr-pull-secret
+containerPort: 80
