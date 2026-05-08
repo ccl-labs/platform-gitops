@@ -54,7 +54,7 @@ spec:
         description: ${{ parameters.description }} (backend)
         defaultBranch: main
         sourcePath: ./backend
-        repoVisibility: private
+        repoVisibility: public
 
     - id: fetch-frontend
       name: フロントエンドスケルトン生成
@@ -74,7 +74,7 @@ spec:
         description: ${{ parameters.description }} (frontend)
         defaultBranch: main
         sourcePath: ./frontend
-        repoVisibility: private
+        repoVisibility: public
 
     - id: fetch-gitops
       name: GitOps ファイル生成
