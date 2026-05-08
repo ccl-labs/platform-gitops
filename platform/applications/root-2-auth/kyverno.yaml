@@ -17,6 +17,21 @@ spec:
           replicas: 1
         backgroundController:
           replicas: 1
+          rbac:
+            clusterRole:
+              extraResources:
+                - apiGroups:
+                    - ""
+                  resources:
+                    - secrets
+                  verbs:
+                    - get
+                    - list
+                    - watch
+                    - create
+                    - update
+                    - patch
+                    - delete
         cleanupController:
           replicas: 1
         reportsController:
