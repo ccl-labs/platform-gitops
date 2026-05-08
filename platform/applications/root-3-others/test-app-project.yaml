@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: test-app
+  namespace: argocd
+spec:
+  sourceRepos:
+    - https://github.com/ccl-labs/platform-charts.git
+    - https://github.com/ccl-labs/platform-gitops.git
+  destinations:
+    - namespace: test-app
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
