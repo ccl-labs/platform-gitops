@@ -99,6 +99,7 @@ spec:
           DB: ${{ parameters.withDb }}
         sourcePath: ./gitops
         targetPath: .
+        update: true
 
     - id: register-backend
       name: バックエンドをカタログ登録
