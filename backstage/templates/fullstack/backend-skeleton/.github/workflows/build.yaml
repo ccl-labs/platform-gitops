@@ -16,22 +16,22 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ "{{" }} github.actor {{ "}}" }}
-          password: ${{ "{{" }} secrets.GITHUB_TOKEN {{ "}}" }}
+          username: ${{ "${{" }} github.actor ${{ "}}" }}
+          password: ${{ "${{" }} secrets.GITHUB_TOKEN ${{ "}}" }}
 
       - name: Docker ビルド & プッシュ
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: ghcr.io/ccl-labs/${{ values.appName }}-backend:${{ "{{" }} github.sha {{ "}}" }}
+          tags: ghcr.io/ccl-labs/${{ values.appName }}-backend:${{ "${{" }} github.sha ${{ "}}" }}
 
       - name: GitHub App トークンの生成
         id: token
         uses: actions/create-github-app-token@v3.1.1
         with:
-          client-id: ${{ "{{" }} vars.GITOPS_APP_CLIENT_ID {{ "}}" }}
-          private-key: ${{ "{{" }} secrets.GITOPS_APP_PRIVATE_KEY {{ "}}" }}
+          client-id: ${{ "${{" }} vars.GITOPS_APP_CLIENT_ID ${{ "}}" }}
+          private-key: ${{ "${{" }} secrets.GITOPS_APP_PRIVATE_KEY ${{ "}}" }}
           repositories: platform-gitops
 
       - name: platform-gitops に dispatch
@@ -40,6 +40,6 @@ jobs:
             --method POST \
             -f event_type=update-image \
             -f "client_payload[image_repository]=ghcr.io/ccl-labs/${{ values.appName }}-backend" \
-            -f "client_payload[image_tag]=${{ "{{" }} github.sha {{ "}}" }}"
+            -f "client_payload[image_tag]=${{ "${{" }} github.sha ${{ "}}" }}"
         env:
-          GH_TOKEN: ${{ "{{" }} steps.token.outputs.token {{ "}}" }}
+          GH_TOKEN: ${{ "${{" }} steps.token.outputs.token ${{ "}}" }}
