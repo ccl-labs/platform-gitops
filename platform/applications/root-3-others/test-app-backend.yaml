@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: test-app-backend
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: test-app
+  sources:
+    - repoURL: https://github.com/ccl-labs/platform-charts.git
+      targetRevision: main
+      path: charts/generic-backend
+      helm:
+        valueFiles:
+          - $values/apps/test-app-backend/values.yaml
+    - repoURL: https://github.com/ccl-labs/platform-gitops.git
+      targetRevision: main
+      ref: values
+    - repoURL: https://github.com/ccl-labs/platform-gitops.git
+      targetRevision: main
+      path: apps/test-app-backend/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: test-app
+  ignoreDifferences:
+    - group: argoproj.io
+      kind: Rollout
+      jsonPointers:
+        - /spec/replicas
+        - /spec/template/spec/containers/0/ports/0/protocol
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      jqPathExpressions:
+        - .spec.parentRefs[].group
+        - .spec.parentRefs[].kind
+    - group: external-secrets.io
+      kind: ExternalSecret
+      jqPathExpressions:
+        - .spec.data[].remoteRef.conversionStrategy
+        - .spec.data[].remoteRef.decodingStrategy
+        - .spec.data[].remoteRef.metadataPolicy
+        - .spec.data[].remoteRef.nullBytePolicy
+        - .spec.target.creationPolicy
+        - .spec.target.deletionPolicy
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
