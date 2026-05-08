@@ -1,0 +1,128 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: fullstack-template
+  title: フルスタックアプリ（FastAPI + React）
+  description: FastAPI バックエンド + React フロントエンドの Golden Path テンプレート
+  tags:
+    - fullstack
+    - fastapi
+    - react
+    - platform
+spec:
+  owner: platform-team
+  type: service
+
+  parameters:
+    - title: アプリの設定
+      required:
+        - name
+        - description
+      properties:
+        name:
+          title: アプリ名
+          type: string
+          description: アプリ名（リポジトリ名・Namespace 名に使用）
+          pattern: '^[a-z0-9][a-z0-9-]{1,28}[a-z0-9]$'
+          ui:autofocus: true
+        description:
+          title: アプリの説明
+          type: string
+          description: アプリの説明（Backstage カタログに使用）
+        withDb:
+          title: PostgreSQL DB を使用する
+          type: boolean
+          default: false
+          description: チェックすると CloudNativePG Cluster が作成されます（backend のみ）
+
+  steps:
+    - id: fetch-backend
+      name: バックエンドスケルトン生成
+      action: fetch:template
+      input:
+        url: ./backend-skeleton
+        targetPath: ./backend
+        values:
+          appName: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+
+    - id: publish-backend
+      name: バックエンドリポジトリ作成
+      action: publish:github
+      input:
+        repoUrl: github.com?repo=${{ parameters.name }}-backend&owner=ccl-labs
+        description: ${{ parameters.description }} (backend)
+        defaultBranch: main
+        sourcePath: ./backend
+        repoVisibility: private
+
+    - id: fetch-frontend
+      name: フロントエンドスケルトン生成
+      action: fetch:template
+      input:
+        url: ./frontend-skeleton
+        targetPath: ./frontend
+        values:
+          appName: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+
+    - id: publish-frontend
+      name: フロントエンドリポジトリ作成
+      action: publish:github
+      input:
+        repoUrl: github.com?repo=${{ parameters.name }}-frontend&owner=ccl-labs
+        description: ${{ parameters.description }} (frontend)
+        defaultBranch: main
+        sourcePath: ./frontend
+        repoVisibility: private
+
+    - id: fetch-gitops
+      name: GitOps ファイル生成
+      action: fetch:template
+      input:
+        url: ./gitops-skeleton
+        targetPath: ./gitops
+        values:
+          appName: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+          withDb: ${{ parameters.withDb }}
+
+    - id: publish-pr
+      name: platform-gitops へ PR 作成
+      action: publish:github:pull-request
+      input:
+        repoUrl: github.com?repo=platform-gitops&owner=ccl-labs
+        title: "feat(${{ parameters.name }}): add new fullstack app"
+        branchName: "app/${{ parameters.name }}"
+        description: |
+          フルスタックアプリ `${{ parameters.name }}` の払い出しリクエストです。
+          DB: ${{ parameters.withDb }}
+        sourcePath: ./gitops
+        targetPath: .
+
+    - id: register-backend
+      name: バックエンドをカタログ登録
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish-backend'].output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+
+    - id: register-frontend
+      name: フロントエンドをカタログ登録
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish-frontend'].output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+
+  output:
+    links:
+      - title: バックエンドリポジトリ
+        url: ${{ steps['publish-backend'].output.remoteUrl }}
+      - title: フロントエンドリポジトリ
+        url: ${{ steps['publish-frontend'].output.remoteUrl }}
+      - title: Pull Request
+        url: ${{ steps['publish-pr'].output.remoteUrl }}
+      - title: バックエンドカタログ
+        url: ${{ steps['register-backend'].output.entityRef }}
+      - title: フロントエンドカタログ
+        url: ${{ steps['register-frontend'].output.entityRef }}
