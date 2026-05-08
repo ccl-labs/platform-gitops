@@ -16,6 +16,25 @@ configs:
         - email
         - groups
       rootCA: $argocd-local-ca:ca.crt
+    resource.customizations.health.admissionregistration.k8s.io_ValidatingWebhookConfiguration: |
+      hs = {}
+      if obj.webhooks ~= nil then
+        for i, webhook in ipairs(obj.webhooks) do
+          if webhook.clientConfig ~= nil then
+            if webhook.clientConfig.caBundle == nil or webhook.clientConfig.caBundle == "" then
+              hs.status = "Progressing"
+              hs.message = "Waiting for CA bundle injection by cert-controller"
+              return hs
+            end
+          end
+        end
+        hs.status = "Healthy"
+        hs.message = "CA bundle injected"
+        return hs
+      end
+      hs.status = "Progressing"
+      hs.message = "No webhooks defined"
+      return hs
     resource.customizations.health.external-secrets.io_ClusterSecretStore: |
       hs = {}
       if obj.status ~= nil then
