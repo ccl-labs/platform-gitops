@@ -7,7 +7,9 @@ metadata:
   namespace: sample-app
 spec:
   parentRefs:
-    - name: eg
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: eg
       namespace: envoy-gateway-system
   hostnames:
     - "sample-frontend.platform.local"
@@ -17,5 +19,8 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: sample-frontend
+        - group: ""
+          kind: Service
+          name: sample-frontend
           port: 80
+          weight: 1
