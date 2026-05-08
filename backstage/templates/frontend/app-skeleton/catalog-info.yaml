@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ${{ values.appName }}
+  description: ${{ values.description }}
+  annotations:
+    github.com/project-slug: ccl-labs/${{ values.appName }}
+spec:
+  type: website
+  lifecycle: production
+  owner: app-developers

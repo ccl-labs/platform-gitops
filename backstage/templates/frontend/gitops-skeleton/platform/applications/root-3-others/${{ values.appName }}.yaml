@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ${{ values.appName }}
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+spec:
+  project: ${{ values.appName }}
+  sources:
+    - repoURL: https://github.com/ccl-labs/platform-charts.git
+      targetRevision: main
+      path: charts/generic-frontend
+      helm:
+        valueFiles:
+          - $values/apps/${{ values.appName }}/values.yaml
+    - repoURL: https://github.com/ccl-labs/platform-gitops.git
+      targetRevision: main
+      ref: values
+    - repoURL: https://github.com/ccl-labs/platform-gitops.git
+      targetRevision: main
+      path: apps/${{ values.appName }}/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ${{ values.appName }}
+  ignoreDifferences:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      jqPathExpressions:
+        - .spec.parentRefs[].group
+        - .spec.parentRefs[].kind
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
+    managedNamespaceMetadata:
+      labels:
+        policy-enforced: "true"
+        ghcr-pull-secret: enabled
+        goldilocks.fairwinds.com/enabled: "true"

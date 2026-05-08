@@ -1,0 +1,91 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: frontend-template
+  title: フロントエンドアプリ（React + Vite）
+  description: React + Vite フロントエンドアプリの Golden Path テンプレート
+  tags:
+    - frontend
+    - react
+    - vite
+    - platform
+spec:
+  owner: platform-team
+  type: website
+
+  parameters:
+    - title: アプリの設定
+      required:
+        - name
+        - description
+      properties:
+        name:
+          title: アプリ名
+          type: string
+          description: アプリ名（リポジトリ名・Namespace 名に使用）
+          pattern: '^[a-z0-9][a-z0-9-]{1,28}[a-z0-9]$'
+          ui:autofocus: true
+        description:
+          title: アプリの説明
+          type: string
+          description: アプリの説明（Backstage カタログに使用）
+
+  steps:
+    - id: fetch-app
+      name: アプリリポジトリ用スケルトン生成
+      action: fetch:template
+      input:
+        url: ./app-skeleton
+        targetPath: ./app
+        values:
+          appName: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+
+    - id: publish-repo
+      name: GitHub リポジトリ作成
+      action: publish:github
+      input:
+        repoUrl: github.com?repo=${{ parameters.name }}&owner=ccl-labs
+        description: ${{ parameters.description }}
+        defaultBranch: main
+        sourcePath: ./app
+        repoVisibility: private
+
+    - id: fetch-gitops
+      name: GitOps ファイル生成
+      action: fetch:template
+      input:
+        url: ./gitops-skeleton
+        targetPath: ./gitops
+        values:
+          appName: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+          repoUrl: ${{ steps['publish-repo'].output.remoteUrl }}
+
+    - id: publish-pr
+      name: platform-gitops へ PR 作成
+      action: publish:github:pull-request
+      input:
+        repoUrl: github.com?repo=platform-gitops&owner=ccl-labs
+        title: "feat(${{ parameters.name }}): add new frontend app"
+        branchName: "app/${{ parameters.name }}"
+        description: |
+          フロントエンドアプリ `${{ parameters.name }}` の払い出しリクエストです。
+        sourcePath: ./gitops
+        targetPath: .
+
+    - id: register
+      name: Backstage カタログ登録
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish-repo'].output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+
+  output:
+    links:
+      - title: リポジトリ
+        url: ${{ steps['publish-repo'].output.remoteUrl }}
+      - title: Pull Request
+        url: ${{ steps['publish-pr'].output.remoteUrl }}
+      - title: カタログ
+        url: ${{ steps.register.output.entityRef }}

@@ -1,0 +1,7 @@
+app:
+  name: ${{ values.appName }}
+image:
+  repository: ghcr.io/ccl-labs/${{ values.appName }}
+  tag: latest
+  pullSecretName: ghcr-pull-secret
+containerPort: 80
