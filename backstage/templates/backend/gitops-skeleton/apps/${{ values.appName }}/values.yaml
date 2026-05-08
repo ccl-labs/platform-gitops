@@ -1,0 +1,13 @@
+app:
+  name: ${{ values.appName }}
+image:
+  repository: ghcr.io/ccl-labs/${{ values.appName }}
+  tag: latest
+  pullSecretName: ghcr-pull-secret
+containerPort: 8000
+db:
+  enabled: ${{ values.withDb }}
+  name: ${{ values.appName }}-db
+  instances: 1
+  postgresVersion: 17
+  storageSize: 1Gi
