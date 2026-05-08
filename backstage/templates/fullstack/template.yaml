@@ -107,6 +107,7 @@ spec:
       input:
         repoContentsUrl: ${{ steps['publish-backend'].output.repoContentsUrl }}
         catalogInfoPath: /catalog-info.yaml
+        optional: true
 
     - id: register-frontend
       name: フロントエンドをカタログ登録
@@ -114,6 +115,7 @@ spec:
       input:
         repoContentsUrl: ${{ steps['publish-frontend'].output.repoContentsUrl }}
         catalogInfoPath: /catalog-info.yaml
+        optional: true
 
   output:
     links:
