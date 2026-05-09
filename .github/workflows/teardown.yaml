@@ -43,6 +43,12 @@ jobs:
           git diff --cached --quiet || git commit -m "chore: remove ${{ github.event.inputs.appName }} gitops manifests"
           git push
 
+      - name: トークン権限確認（デバッグ用）
+        run: |
+          gh api /repos/ccl-labs/${{ github.event.inputs.appName }}-backend --jq '.permissions' || true
+        env:
+          GH_TOKEN: ${{ steps.token.outputs.token }}
+
       - name: GitHub リポジトリ削除
         run: |
           gh repo delete ccl-labs/${{ github.event.inputs.appName }}-backend --yes || true
