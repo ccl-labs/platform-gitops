@@ -87,19 +87,14 @@ spec:
           description: ${{ parameters.description }}
           withDb: ${{ parameters.withDb }}
 
-    - id: publish-pr
-      name: platform-gitops へ PR 作成
-      action: publish:github:pull-request
+    - id: publish-gitops
+      name: platform-gitops へ直接 push
+      action: github:repo:push
       input:
         repoUrl: github.com?repo=platform-gitops&owner=ccl-labs
-        title: "feat(${{ parameters.name }}): add new fullstack app"
-        branchName: "app/${{ parameters.name }}"
-        description: |
-          フルスタックアプリ `${{ parameters.name }}` の払い出しリクエストです。
-          DB: ${{ parameters.withDb }}
         sourcePath: ./gitops
-        targetPath: .
-        update: true
+        branch: main
+        commitMessage: "feat(${{ parameters.name }}): add new fullstack app"
 
     - id: register-backend
       name: バックエンドをカタログ登録
@@ -123,8 +118,6 @@ spec:
         url: ${{ steps['publish-backend'].output.remoteUrl }}
       - title: フロントエンドリポジトリ
         url: ${{ steps['publish-frontend'].output.remoteUrl }}
-      - title: Pull Request
-        url: ${{ steps['publish-pr'].output.remoteUrl }}
       - title: バックエンドカタログ
         url: ${{ steps['register-backend'].output.entityRef }}
       - title: フロントエンドカタログ
