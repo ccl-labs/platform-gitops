@@ -18,6 +18,7 @@ backstage:
       csp:
         upgrade-insecure-requests: false
         connect-src: ["'self'", 'https://api.github.com']
+        frame-src: ["'self'", 'https://grafana.platform.local']
       cors:
         origin: https://backstage.platform.local
         methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
