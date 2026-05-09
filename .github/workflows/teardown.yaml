@@ -24,8 +24,8 @@ jobs:
         id: token
         uses: actions/create-github-app-token@v3.1.1
         with:
-          client-id: ${{ vars.GITOPS_APP_CLIENT_ID }}
-          private-key: ${{ secrets.GITOPS_APP_PRIVATE_KEY }}
+          client-id: ${{ vars.BACKSTAGE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.BACKSTAGE_APP_PRIVATE_KEY }}
           owner: ccl-labs
 
       - name: platform-gitops のチェックアウト
@@ -42,12 +42,6 @@ jobs:
           git add -A
           git diff --cached --quiet || git commit -m "chore: remove ${{ github.event.inputs.appName }} gitops manifests"
           git push
-
-      - name: トークン権限確認（デバッグ用）
-        run: |
-          gh api /repos/ccl-labs/${{ github.event.inputs.appName }}-backend --jq '.permissions' || true
-        env:
-          GH_TOKEN: ${{ steps.token.outputs.token }}
 
       - name: GitHub リポジトリ削除
         run: |
