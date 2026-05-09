@@ -93,8 +93,8 @@ spec:
       input:
         repoUrl: github.com?repo=platform-gitops&owner=ccl-labs
         sourcePath: ./gitops
-        branch: main
-        commitMessage: "feat(${{ parameters.name }}): add new fullstack app"
+        defaultBranch: main
+        gitCommitMessage: "feat(${{ parameters.name }}): add new fullstack app"
 
     - id: register-backend
       name: バックエンドをカタログ登録
