@@ -13,9 +13,10 @@ jobs:
         with:
           client-id: ${{ vars.GITOPS_APP_CLIENT_ID }}
           private-key: ${{ secrets.GITOPS_APP_PRIVATE_KEY }}
-      - name: platform-gitopsのチェックアウト
+      - name: apps-gitopsのチェックアウト
         uses: actions/checkout@v4
         with:
+          repository: ccl-labs/apps-gitops
           token: ${{ steps.token.outputs.token }}
 
       - name: アプリ名の特定
