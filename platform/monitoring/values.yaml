@@ -3,6 +3,12 @@ grafana:
     enabled: false
   # 管理者パスワード（ポートフォリオ用途のため固定値）
   adminPassword: admin
+  grafana.ini:
+    security:
+      allow_embedding: true
+    auth.anonymous:
+      enabled: true
+      org_role: Viewer
   additionalDataSources:
     - name: Loki
       type: loki
