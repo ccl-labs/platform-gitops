@@ -2,7 +2,7 @@ app:
   name: test-app-backend
 image:
   repository: ghcr.io/ccl-labs/test-app-backend
-  tag: latest
+  tag: ebe825d51b9ef467fbda927c2000ed321db4373a
   pullSecretName: ghcr-pull-secret
 containerPort: 8000
 db:
