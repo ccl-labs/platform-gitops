@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: user-apps
+  namespace: argocd
+spec:
+  project: platform
+  source:
+    repoURL: https://github.com/ccl-labs/platform-gitops.git
+    targetRevision: main
+    path: apps
+    directory:
+      recurse: true
+      include: '*/application.yaml'
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

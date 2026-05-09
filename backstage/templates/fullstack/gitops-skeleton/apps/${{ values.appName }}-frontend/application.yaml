@@ -1,48 +1,34 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ${{ values.appName }}-backend
+  name: ${{ values.appName }}-frontend
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "2"
 spec:
-  project: ${{ values.appName }}
+  project: user-apps
   sources:
     - repoURL: https://github.com/ccl-labs/platform-charts.git
       targetRevision: main
-      path: charts/generic-backend
+      path: charts/generic-frontend
       helm:
         valueFiles:
-          - $values/apps/${{ values.appName }}-backend/values.yaml
+          - $values/apps/${{ values.appName }}-frontend/values.yaml
     - repoURL: https://github.com/ccl-labs/platform-gitops.git
       targetRevision: main
       ref: values
     - repoURL: https://github.com/ccl-labs/platform-gitops.git
       targetRevision: main
-      path: apps/${{ values.appName }}-backend/manifests
+      path: apps/${{ values.appName }}-frontend/manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: ${{ values.appName }}
   ignoreDifferences:
-    - group: argoproj.io
-      kind: Rollout
-      jsonPointers:
-        - /spec/replicas
-        - /spec/template/spec/containers/0/ports/0/protocol
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       jqPathExpressions:
         - .spec.parentRefs[].group
         - .spec.parentRefs[].kind
-    - group: external-secrets.io
-      kind: ExternalSecret
-      jqPathExpressions:
-        - .spec.data[].remoteRef.conversionStrategy
-        - .spec.data[].remoteRef.decodingStrategy
-        - .spec.data[].remoteRef.metadataPolicy
-        - .spec.data[].remoteRef.nullBytePolicy
-        - .spec.target.creationPolicy
-        - .spec.target.deletionPolicy
   syncPolicy:
     automated:
       prune: true

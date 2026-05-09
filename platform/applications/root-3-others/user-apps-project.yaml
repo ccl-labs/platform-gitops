@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: ${{ values.appName }}
+  name: user-apps
   namespace: argocd
 spec:
   sourceRepos:
     - https://github.com/ccl-labs/platform-charts.git
     - https://github.com/ccl-labs/platform-gitops.git
   destinations:
-    - namespace: ${{ values.appName }}
+    - namespace: '*'
       server: https://kubernetes.default.svc
   clusterResourceWhitelist:
     - group: ""
