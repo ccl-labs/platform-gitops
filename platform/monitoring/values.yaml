@@ -17,6 +17,7 @@ grafana:
             datasourceUid: "P214B5B846CF3925F"
     - name: Tempo
       type: tempo
+      uid: tempo
       url: http://tempo.tracing.svc.cluster.local:3200
       isDefault: false
       jsonData:
