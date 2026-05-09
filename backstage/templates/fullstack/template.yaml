@@ -122,6 +122,6 @@ spec:
       - title: フロントエンドリポジトリ
         url: ${{ steps['publish-frontend'].output.remoteUrl }}
       - title: バックエンドカタログ
-        url: ${{ steps['register-backend'].output.entityRef }}
+        url: ${{ steps['register-backend'].output.catalogInfoUrl }}
       - title: フロントエンドカタログ
-        url: ${{ steps['register-frontend'].output.entityRef }}
+        url: ${{ steps['register-frontend'].output.catalogInfoUrl }}
