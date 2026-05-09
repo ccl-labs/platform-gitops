@@ -1,7 +1,0 @@
-app:
-  name: test-app-frontend
-image:
-  repository: ghcr.io/ccl-labs/test-app-frontend
-  tag: ebe825d51b9ef467fbda927c2000ed321db4373a
-  pullSecretName: ghcr-pull-secret
-containerPort: 80
