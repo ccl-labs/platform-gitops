@@ -3,7 +3,7 @@ app:
   version: "1.0.0"
 image:
   repository: ghcr.io/ccl-labs/sample-backend
-  tag:   d094371
+  tag:   248e3d1
   pullPolicy: IfNotPresent
   pullSecretName: ghcr-pull-secret
 containerPort: 8000
