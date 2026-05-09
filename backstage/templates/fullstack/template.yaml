@@ -93,6 +93,7 @@ spec:
       input:
         repoUrl: github.com?repo=platform-gitops&owner=ccl-labs
         title: "feat(${{ parameters.name }}): add new fullstack app"
+        description: "Add GitOps manifests for ${{ parameters.name }}"
         branchName: "app/${{ parameters.name }}"
         sourcePath: ./gitops
         targetPath: .
