@@ -4,7 +4,7 @@ metadata:
   name: user-apps
   namespace: argocd
 spec:
-  project: platform
+  project: default
   source:
     repoURL: https://github.com/ccl-labs/platform-gitops.git
     targetRevision: main
