@@ -94,6 +94,10 @@ backstage:
           rules:
             - allow: [Template]
         - type: url
+          target: https://github.com/ccl-labs/platform-gitops/blob/main/backstage/templates/teardown/template.yaml
+          rules:
+            - allow: [Template]
+        - type: url
           target: https://github.com/ccl-labs/platform-gitops/blob/main/catalog-info.yaml
           rules:
             - allow: [System, Component]

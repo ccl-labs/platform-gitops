@@ -1,0 +1,46 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: teardown-template
+  title: アプリ削除（Teardown）
+  description: Golden Path で作成したアプリ（GitOps マニフェスト・GitHub リポジトリ・GHCR パッケージ）を削除します
+  tags:
+    - teardown
+    - platform
+spec:
+  owner: platform-team
+  type: service
+
+  parameters:
+    - title: 削除するアプリの確認
+      required:
+        - appName
+        - confirmName
+      properties:
+        appName:
+          title: アプリ名
+          type: string
+          description: 削除するアプリ名
+          pattern: '^[a-z0-9][a-z0-9-]{1,28}[a-z0-9]$'
+          ui:autofocus: true
+        confirmName:
+          title: アプリ名（確認）
+          type: string
+          description: 削除するアプリ名を再入力してください（ミス防止）
+
+  steps:
+    - id: teardown
+      name: アプリの削除
+      action: github:actions:dispatch
+      input:
+        repoUrl: github.com?repo=platform-gitops&owner=ccl-labs
+        workflowId: teardown.yaml
+        branchOrTagName: main
+        workflowInputs:
+          appName: ${{ parameters.appName }}
+          confirmName: ${{ parameters.confirmName }}
+
+  output:
+    links:
+      - title: GitHub Actions ワークフロー
+        url: https://github.com/ccl-labs/platform-gitops/actions/workflows/teardown.yaml

@@ -1,0 +1,60 @@
+name: Teardown App
+on:
+  workflow_dispatch:
+    inputs:
+      appName:
+        required: true
+        type: string
+      confirmName:
+        required: true
+        type: string
+
+jobs:
+  teardown:
+    runs-on: ubuntu-latest
+    steps:
+      - name: アプリ名の確認
+        run: |
+          if [ "${{ github.event.inputs.appName }}" != "${{ github.event.inputs.confirmName }}" ]; then
+            echo "Error: appName と confirmName が一致しません"
+            exit 1
+          fi
+
+      - name: GitHub App トークンの生成
+        id: token
+        uses: actions/create-github-app-token@v3.1.1
+        with:
+          client-id: ${{ vars.GITOPS_APP_CLIENT_ID }}
+          private-key: ${{ secrets.GITOPS_APP_PRIVATE_KEY }}
+          owner: ccl-labs
+
+      - name: platform-gitops のチェックアウト
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.token.outputs.token }}
+
+      - name: GitOps マニフェスト削除
+        run: |
+          rm -rf apps/${{ github.event.inputs.appName }}-backend
+          rm -rf apps/${{ github.event.inputs.appName }}-frontend
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "chore: remove ${{ github.event.inputs.appName }} gitops manifests"
+          git push
+
+      - name: GitHub リポジトリ削除
+        run: |
+          gh repo delete ccl-labs/${{ github.event.inputs.appName }}-backend --yes || true
+          gh repo delete ccl-labs/${{ github.event.inputs.appName }}-frontend --yes || true
+        env:
+          GH_TOKEN: ${{ steps.token.outputs.token }}
+
+      - name: GHCR パッケージ削除
+        run: |
+          gh api --method DELETE \
+            /orgs/ccl-labs/packages/container/${{ github.event.inputs.appName }}-backend || true
+          gh api --method DELETE \
+            /orgs/ccl-labs/packages/container/${{ github.event.inputs.appName }}-frontend || true
+        env:
+          GH_TOKEN: ${{ steps.token.outputs.token }}
