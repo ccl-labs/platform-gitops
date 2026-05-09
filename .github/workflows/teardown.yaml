@@ -28,9 +28,10 @@ jobs:
           private-key: ${{ secrets.BACKSTAGE_APP_PRIVATE_KEY }}
           owner: ccl-labs
 
-      - name: platform-gitops のチェックアウト
+      - name: apps-gitops のチェックアウト
         uses: actions/checkout@v4
         with:
+          repository: ccl-labs/apps-gitops
           token: ${{ steps.token.outputs.token }}
 
       - name: GitOps マニフェスト削除

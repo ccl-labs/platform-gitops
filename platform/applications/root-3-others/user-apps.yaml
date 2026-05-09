@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/ccl-labs/platform-gitops.git
+    repoURL: https://github.com/ccl-labs/apps-gitops.git
     targetRevision: main
     path: apps
     directory:
