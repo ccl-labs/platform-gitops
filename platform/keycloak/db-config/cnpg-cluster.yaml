@@ -23,3 +23,19 @@ spec:
     limits:
       memory: "512Mi"
       cpu: "500m"
+  backup:
+    barmanObjectStore:
+      endpointURL: "http://host.k3d.internal:9000"
+      destinationPath: "s3://cnpg-backup/keycloak-db"
+      s3Credentials:
+        accessKeyId:
+          name: minio-backup-secret
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: minio-backup-secret
+          key: ACCESS_SECRET_KEY
+      wal:
+        compression: gzip
+      data:
+        compression: gzip
+    retentionPolicy: "7d"

@@ -1,0 +1,12 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: backstage-db-backup
+  namespace: backstage
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"
+spec:
+  schedule: "0 2 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: backstage-db
