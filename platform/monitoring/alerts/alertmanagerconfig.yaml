@@ -22,7 +22,7 @@ spec:
   receivers:
     - name: discord-cnpg
       discordConfigs:
-        - webhookURL:
+        - apiURL:
             name: discord-webhook-secret
             key: url
           title: |-
