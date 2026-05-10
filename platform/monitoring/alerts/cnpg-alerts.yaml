@@ -1,0 +1,41 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cnpg-backup-alerts
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: cnpg.backup
+      rules:
+        - alert: CNPGWalArchivingFailing
+          expr: cnpg_collector_pg_wal_archiving_failing_count > 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "{{ $labels.namespace }}/{{ $labels.cluster_name }} WALアーカイブ失敗"
+            description: "{{ $value }} 件の WAL ファイルがアーカイブできていません。MinIO への接続を確認してください。"
+
+        - alert: CNPGBackupNotTaken
+          expr: |
+            (time() - cnpg_collector_last_available_backup_timestamp) > 90000
+            and cnpg_collector_last_available_backup_timestamp > 0
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "{{ $labels.namespace }}/{{ $labels.cluster_name }} バックアップ未実行"
+            description: "最終成功バックアップから 25 時間以上経過しています（最終成功: {{ $value | humanizeTimestamp }}）。"
+
+        - alert: CNPGLastBackupFailed
+          expr: |
+            cnpg_collector_last_failed_backup_timestamp
+            > cnpg_collector_last_available_backup_timestamp
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "{{ $labels.namespace }}/{{ $labels.cluster_name }} バックアップ失敗"
+            description: "最後のバックアップが失敗しました。ScheduledBackup のログを確認してください。"
