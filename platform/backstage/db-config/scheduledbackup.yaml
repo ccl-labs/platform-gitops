@@ -6,7 +6,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "6"
 spec:
-  schedule: "0 2 * * *"
+  schedule: "0 21 * * *"
   backupOwnerReference: self
   cluster:
     name: backstage-db
