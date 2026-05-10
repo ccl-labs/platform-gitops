@@ -1,0 +1,36 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: cnpg-discord
+  namespace: monitoring
+  labels:
+    alertmanagerConfig: platform
+spec:
+  route:
+    receiver: discord-cnpg
+    matchers:
+      - name: alertname
+        matchType: =~
+        value: "CNPG.*"
+    groupBy:
+      - alertname
+      - namespace
+      - cluster_name
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 12h
+  receivers:
+    - name: discord-cnpg
+      discordConfigs:
+        - webhookURL:
+            name: discord-webhook-secret
+            key: url
+          title: |-
+            {{ if eq .Status "firing" }}🔥{{ else }}✅{{ end }} {{ .CommonLabels.alertname }}
+          message: |-
+            {{ range .Alerts }}
+            **namespace**: {{ .Labels.namespace }}
+            **cluster**: {{ .Labels.cluster_name }}
+            **severity**: {{ .Labels.severity }}
+            {{ if .Annotations.description }}{{ .Annotations.description }}{{ end }}
+            {{ end }}
