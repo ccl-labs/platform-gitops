@@ -43,6 +43,9 @@ prometheus:
         cpu: 500m
 alertmanager:
   alertmanagerSpec:
+    # AlertmanagerConfig の namespace スコープ強制を無効化（全 namespace のアラートを受け取るため）
+    alertmanagerConfigMatcherStrategy:
+      type: None
     resources:
       requests:
         memory: 64Mi
