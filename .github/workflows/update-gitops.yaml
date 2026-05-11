@@ -16,7 +16,7 @@ jobs:
       - name: apps-gitopsのチェックアウト
         uses: actions/checkout@v4
         with:
-          repository: ccl-labs/apps-gitops
+          repository: okccl/apps-gitops
           token: ${{ steps.token.outputs.token }}
 
       - name: アプリ名の特定

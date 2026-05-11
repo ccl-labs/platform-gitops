@@ -50,7 +50,7 @@ spec:
       name: バックエンドリポジトリ作成
       action: publish:github
       input:
-        repoUrl: github.com?repo=${{ parameters.name }}-backend&owner=ccl-labs
+        repoUrl: github.com?repo=${{ parameters.name }}-backend&owner=okccl
         description: ${{ parameters.description }} (backend)
         defaultBranch: main
         sourcePath: ./backend
@@ -70,7 +70,7 @@ spec:
       name: フロントエンドリポジトリ作成
       action: publish:github
       input:
-        repoUrl: github.com?repo=${{ parameters.name }}-frontend&owner=ccl-labs
+        repoUrl: github.com?repo=${{ parameters.name }}-frontend&owner=okccl
         description: ${{ parameters.description }} (frontend)
         defaultBranch: main
         sourcePath: ./frontend
@@ -91,7 +91,7 @@ spec:
       name: apps-gitops へ PR 作成
       action: publish:github:pull-request
       input:
-        repoUrl: github.com?repo=apps-gitops&owner=ccl-labs
+        repoUrl: github.com?repo=apps-gitops&owner=okccl
         title: "feat(${{ parameters.name }}): add new fullstack app"
         description: "Add GitOps manifests for ${{ parameters.name }}"
         branchName: "app/${{ parameters.name }}"

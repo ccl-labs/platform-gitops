@@ -37,7 +37,7 @@ spec:
       name: GitOps リポジトリへ PR を作成
       action: publish:github:pull-request
       input:
-        repoUrl: github.com?repo=platform-gitops&owner=ccl-labs
+        repoUrl: github.com?repo=platform-gitops&owner=okccl
         title: "feat(vcluster): add vcluster-${{ parameters.name }}"
         branchName: "vcluster/${{ parameters.name }}"
         description: |

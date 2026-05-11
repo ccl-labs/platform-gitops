@@ -4,7 +4,7 @@ metadata:
   name: ${{ values.appName }}-frontend
   description: ${{ values.description }}
   annotations:
-    github.com/project-slug: ccl-labs/${{ values.appName }}-frontend
+    github.com/project-slug: okccl/${{ values.appName }}-frontend
 spec:
   type: website
   lifecycle: production

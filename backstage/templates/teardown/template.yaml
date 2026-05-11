@@ -33,7 +33,7 @@ spec:
       name: アプリの削除
       action: github:actions:dispatch
       input:
-        repoUrl: github.com?repo=platform-gitops&owner=ccl-labs
+        repoUrl: github.com?repo=platform-gitops&owner=okccl
         workflowId: teardown.yaml
         branchOrTagName: main
         workflowInputs:
@@ -43,4 +43,4 @@ spec:
   output:
     links:
       - title: GitHub Actions ワークフロー
-        url: https://github.com/ccl-labs/platform-gitops/actions/workflows/teardown.yaml
+        url: https://github.com/okccl/platform-gitops/actions/workflows/teardown.yaml

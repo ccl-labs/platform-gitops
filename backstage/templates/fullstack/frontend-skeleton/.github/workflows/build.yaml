@@ -25,21 +25,21 @@ jobs:
         with:
           client-id: ${{ "${{" }} vars.GITOPS_APP_CLIENT_ID ${{ "}}" }}
           private-key: ${{ "${{" }} secrets.GITOPS_APP_PRIVATE_KEY ${{ "}}" }}
-          owner: ccl-labs
+          owner: okccl
 
       - name: Docker ビルド & プッシュ
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: ghcr.io/ccl-labs/${{ values.appName }}-frontend:${{ "${{" }} github.sha ${{ "}}" }}
+          tags: ghcr.io/okccl/${{ values.appName }}-frontend:${{ "${{" }} github.sha ${{ "}}" }}
 
       - name: platform-gitops に dispatch
         run: |
-          gh api repos/ccl-labs/platform-gitops/dispatches \
+          gh api repos/okccl/platform-gitops/dispatches \
             --method POST \
             -f event_type=update-image \
-            -f "client_payload[image_repository]=ghcr.io/ccl-labs/${{ values.appName }}-frontend" \
+            -f "client_payload[image_repository]=ghcr.io/okccl/${{ values.appName }}-frontend" \
             -f "client_payload[image_tag]=${{ "${{" }} github.sha ${{ "}}" }}"
         env:
           GH_TOKEN: ${{ "${{" }} steps.token.outputs.token ${{ "}}" }}

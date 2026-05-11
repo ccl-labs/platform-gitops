@@ -5,8 +5,8 @@ metadata:
   namespace: argocd
 spec:
   sourceRepos:
-    - https://github.com/ccl-labs/platform-charts.git
-    - https://github.com/ccl-labs/platform-gitops.git
+    - https://github.com/okccl/platform-charts.git
+    - https://github.com/okccl/platform-gitops.git
   destinations:
     - namespace: '*'
       server: https://kubernetes.default.svc

@@ -26,12 +26,12 @@ jobs:
         with:
           client-id: ${{ vars.BACKSTAGE_APP_CLIENT_ID }}
           private-key: ${{ secrets.BACKSTAGE_APP_PRIVATE_KEY }}
-          owner: ccl-labs
+          owner: okccl
 
       - name: apps-gitops のチェックアウト
         uses: actions/checkout@v4
         with:
-          repository: ccl-labs/apps-gitops
+          repository: okccl/apps-gitops
           token: ${{ steps.token.outputs.token }}
 
       - name: GitOps マニフェスト削除
@@ -46,16 +46,16 @@ jobs:
 
       - name: GitHub リポジトリ削除
         run: |
-          gh repo delete ccl-labs/${{ github.event.inputs.appName }}-backend --yes || true
-          gh repo delete ccl-labs/${{ github.event.inputs.appName }}-frontend --yes || true
+          gh repo delete okccl/${{ github.event.inputs.appName }}-backend --yes || true
+          gh repo delete okccl/${{ github.event.inputs.appName }}-frontend --yes || true
         env:
           GH_TOKEN: ${{ steps.token.outputs.token }}
 
       - name: GHCR パッケージ削除
         run: |
           gh api --method DELETE \
-            /orgs/ccl-labs/packages/container/${{ github.event.inputs.appName }}-backend || true
+            /orgs/okccl/packages/container/${{ github.event.inputs.appName }}-backend || true
           gh api --method DELETE \
-            /orgs/ccl-labs/packages/container/${{ github.event.inputs.appName }}-frontend || true
+            /orgs/okccl/packages/container/${{ github.event.inputs.appName }}-frontend || true
         env:
           GH_TOKEN: ${{ steps.token.outputs.token }}

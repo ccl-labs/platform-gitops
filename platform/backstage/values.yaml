@@ -1,7 +1,7 @@
 backstage:
   image:
     registry: ghcr.io
-    repository: ccl-labs/backstage
+    repository: okccl/backstage
     tag: latest
     pullPolicy: Always
     pullSecrets:
@@ -87,47 +87,47 @@ backstage:
     catalog:
       locations:
         - type: url
-          target: https://github.com/ccl-labs/platform-gitops/blob/main/backstage/templates/vcluster/template.yaml
+          target: https://github.com/okccl/platform-gitops/blob/main/backstage/templates/vcluster/template.yaml
           rules:
             - allow: [Template]
         - type: url
-          target: https://github.com/ccl-labs/platform-gitops/blob/main/backstage/templates/fullstack/template.yaml
+          target: https://github.com/okccl/platform-gitops/blob/main/backstage/templates/fullstack/template.yaml
           rules:
             - allow: [Template]
         - type: url
-          target: https://github.com/ccl-labs/platform-gitops/blob/main/backstage/templates/teardown/template.yaml
+          target: https://github.com/okccl/platform-gitops/blob/main/backstage/templates/teardown/template.yaml
           rules:
             - allow: [Template]
         - type: url
-          target: https://github.com/ccl-labs/platform-gitops/blob/main/catalog-info.yaml
+          target: https://github.com/okccl/platform-gitops/blob/main/catalog-info.yaml
           rules:
             - allow: [System, Component]
         - type: url
-          target: https://github.com/ccl-labs/platform-gitops/blob/main/backstage/org.yaml
+          target: https://github.com/okccl/platform-gitops/blob/main/backstage/org.yaml
           rules:
             - allow: [User, Group]
         - type: url
-          target: https://github.com/ccl-labs/sample-backend/blob/main/catalog-info.yaml
+          target: https://github.com/okccl/sample-backend/blob/main/catalog-info.yaml
           rules:
             - allow: [Component]
         - type: url
-          target: https://github.com/ccl-labs/sample-frontend/blob/main/catalog-info.yaml
+          target: https://github.com/okccl/sample-frontend/blob/main/catalog-info.yaml
           rules:
             - allow: [Component]
         - type: url
-          target: https://github.com/ccl-labs/platform-infra/blob/main/catalog-info.yaml
+          target: https://github.com/okccl/platform-infra/blob/main/catalog-info.yaml
           rules:
             - allow: [Component]
         - type: url
-          target: https://github.com/ccl-labs/platform-charts/blob/main/catalog-info.yaml
+          target: https://github.com/okccl/platform-charts/blob/main/catalog-info.yaml
           rules:
             - allow: [Component]
         - type: url
-          target: https://github.com/ccl-labs/platform-docs/blob/main/catalog-info.yaml
+          target: https://github.com/okccl/platform-docs/blob/main/catalog-info.yaml
           rules:
             - allow: [Component]
         - type: url
-          target: https://github.com/ccl-labs/platform-gitops/blob/main/backstage/catalog/platform-components.yaml
+          target: https://github.com/okccl/platform-gitops/blob/main/backstage/catalog/platform-components.yaml
           rules:
             - allow: [Component]
   extraEnvVars:

@@ -10,7 +10,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/ccl-labs/platform-gitops.git
+    repoURL: https://github.com/okccl/platform-gitops.git
     targetRevision: HEAD
     path: platform/gateway/routes/keycloak
   destination:

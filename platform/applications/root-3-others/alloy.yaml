@@ -14,7 +14,7 @@ spec:
       helm:
         valueFiles:
           - $values/platform/logging/alloy-values.yaml
-    - repoURL: https://github.com/ccl-labs/platform-gitops.git
+    - repoURL: https://github.com/okccl/platform-gitops.git
       targetRevision: main
       ref: values
   destination:

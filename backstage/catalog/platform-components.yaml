@@ -5,7 +5,7 @@ metadata:
   name: argocd
   description: GitOps 継続デリバリツール。Git を唯一の正として全コンポーネントを宣言管理
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   links:
     - url: https://argocd.platform.local
       title: ArgoCD UI
@@ -25,7 +25,7 @@ metadata:
   name: external-secrets
   description: Kubernetes External Secrets Operator。SOPS/Age で暗号化されたシークレットをクラスタに同期
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   tags:
     - security
     - secrets
@@ -43,7 +43,7 @@ metadata:
   name: cert-manager
   description: TLS 証明書の自動発行・更新。ローカル CA による *.platform.local HTTPS を実現
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   tags:
     - security
     - networking
@@ -60,7 +60,7 @@ metadata:
   name: envoy-gateway
   description: Gateway API 実装。HTTPRoute / TLSRoute によるトラフィック制御
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   tags:
     - networking
     - gateway-api
@@ -77,7 +77,7 @@ metadata:
   name: cilium
   description: eBPF ベース CNI。ネットワークポリシー・可観測性・高性能パケット処理を提供
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   tags:
     - networking
     - ebpf
@@ -95,7 +95,7 @@ metadata:
   name: keycloak
   description: OIDC IdP。Backstage・ArgoCD の SSO を提供。platform-team / app-developer グループ管理
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   links:
     - url: https://keycloak.platform.local
       title: Keycloak Admin Console
@@ -117,7 +117,7 @@ metadata:
   name: grafana
   description: 可観測性ダッシュボード。Prometheus・Loki・Tempo のデータを統合表示
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   links:
     - url: https://grafana.platform.local
       title: Grafana UI
@@ -138,7 +138,7 @@ metadata:
   name: prometheus
   description: メトリクス収集・アラート管理。kube-prometheus-stack でデプロイ
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   links:
     - url: https://prometheus.platform.local
       title: Prometheus UI
@@ -159,7 +159,7 @@ metadata:
   name: loki
   description: ログ集約・クエリ。Grafana Alloy がログを収集し Loki に転送
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   tags:
     - observability
     - logging
@@ -175,7 +175,7 @@ metadata:
   name: tempo
   description: 分散トレーシングバックエンド。OpenTelemetry トレースを収集・可視化
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   tags:
     - observability
     - tracing
@@ -191,7 +191,7 @@ metadata:
   name: alloy
   description: Grafana Alloy テレメトリエージェント。ログ・メトリクス・トレースを収集して各バックエンドに転送
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   tags:
     - observability
     - telemetry
@@ -208,7 +208,7 @@ metadata:
   name: kyverno
   description: Kubernetes ポリシーエンジン。latest タグ禁止・リソース制限必須などをポリシーで強制
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   tags:
     - security
     - policy
@@ -225,7 +225,7 @@ metadata:
   name: trivy
   description: コンテナイメージ脆弱性スキャナ。Trivy Operator がクラスタ内イメージを継続監視
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   tags:
     - security
     - vulnerability-scanning
@@ -242,7 +242,7 @@ metadata:
   name: cnpg
   description: CloudNativePG PostgreSQL Operator。HA 構成・自動フェイルオーバー・バックアップを提供
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   tags:
     - database
     - postgresql
@@ -260,7 +260,7 @@ metadata:
   name: keda
   description: イベント駆動オートスケーラ。外部メトリクスに基づいた Pod スケーリングを実現
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   tags:
     - autoscaling
     - kubernetes
@@ -276,7 +276,7 @@ metadata:
   name: vpa
   description: Vertical Pod Autoscaler。Pod のリソースリクエストを自動調整
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   tags:
     - autoscaling
     - kubernetes
@@ -292,7 +292,7 @@ metadata:
   name: goldilocks
   description: VPA 推奨値を Grafana ダッシュボードで可視化。適切なリソース設定を支援
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   tags:
     - autoscaling
     - observability
@@ -309,7 +309,7 @@ metadata:
   name: argo-rollouts
   description: プログレッシブデリバリ。カナリア・ブルーグリーンデプロイを実現
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   tags:
     - deployment
     - progressive-delivery
@@ -327,7 +327,7 @@ metadata:
   name: crossplane
   description: Control Plane Framework。クラウドリソースを Kubernetes CR で宣言管理
   annotations:
-    github.com/project-slug: ccl-labs/platform-gitops
+    github.com/project-slug: okccl/platform-gitops
   tags:
     - platform
     - cloud
@@ -344,7 +344,7 @@ metadata:
   name: backstage
   description: 開発者ポータル。Golden Path・カタログ・TechDocs を提供する IDP の中核
   annotations:
-    github.com/project-slug: ccl-labs/backstage
+    github.com/project-slug: okccl/backstage
   links:
     - url: https://backstage.platform.local
       title: Backstage Portal

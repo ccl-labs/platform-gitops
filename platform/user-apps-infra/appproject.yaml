@@ -5,10 +5,10 @@ metadata:
   namespace: argocd
 spec:
   sourceRepos:
-    - https://github.com/ccl-labs/sample-backend.git
-    - https://github.com/ccl-labs/sample-frontend.git
-    - https://github.com/ccl-labs/platform-charts.git
-    - https://github.com/ccl-labs/apps-gitops.git
+    - https://github.com/okccl/sample-backend.git
+    - https://github.com/okccl/sample-frontend.git
+    - https://github.com/okccl/platform-charts.git
+    - https://github.com/okccl/apps-gitops.git
   destinations:
     - namespace: sample-app
       server: https://kubernetes.default.svc
