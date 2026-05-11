@@ -4,5 +4,4 @@ metadata:
   name: ${{ values.appName }}
   labels:
     policy-enforced: "true"
-    ghcr-pull-secret: enabled
     goldilocks.fairwinds.com/enabled: "true"

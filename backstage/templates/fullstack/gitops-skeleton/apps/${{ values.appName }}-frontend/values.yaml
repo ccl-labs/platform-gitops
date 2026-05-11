@@ -3,5 +3,4 @@ app:
 image:
   repository: ghcr.io/okccl/${{ values.appName }}-frontend
   tag: latest
-  pullSecretName: ghcr-pull-secret
 containerPort: 80

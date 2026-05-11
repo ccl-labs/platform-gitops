@@ -3,7 +3,6 @@ app:
 image:
   repository: ghcr.io/okccl/${{ values.appName }}-backend
   tag: latest
-  pullSecretName: ghcr-pull-secret
 containerPort: 8000
 db:
   enabled: ${{ values.withDb }}
