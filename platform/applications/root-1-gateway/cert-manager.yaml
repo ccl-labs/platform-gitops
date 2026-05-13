@@ -32,3 +32,5 @@ spec:
       - CreateNamespace=true
       # CRDを含むリソースの更新に必要
       - ServerSideApply=true
+      # ServiceMonitor CRD は root-2-auth で入るため bootstrap 時に dry-run をスキップ
+      - SkipDryRunOnMissingResource=true
