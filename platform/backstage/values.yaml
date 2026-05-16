@@ -4,6 +4,8 @@ backstage:
     repository: okccl/backstage
     tag: latest
     pullPolicy: Always
+    pullSecrets:
+      - ghcr-pull-secret
   appConfig:
     app:
       title: Platform Backstage
