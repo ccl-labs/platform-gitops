@@ -11,6 +11,7 @@ spec:
   primaryUpdateStrategy: unsupervised
   storage:
     size: 1Gi
+    storageClass: local-path-retain
   bootstrap:
     initdb:
       database: app
