@@ -13,13 +13,12 @@ spec:
     targetRevision: 0.32.1
     helm:
       values: |
+        excludeNamespaces: "kube-system,trivy-system"
         trivy:
           ignoreUnfixed: true
         operator:
-          excludeNamespaces: "kube-system,trivy-system"
           # 同時スキャン数を制限（DB キャッシュロック競合を防ぐ）
-          concurrentNodeScanners: 1
-          concurrentScanJobsLimit: 1
+          scanJobsConcurrentLimit: 1
         serviceMonitor:
           enabled: true
         resources:
