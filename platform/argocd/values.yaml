@@ -63,11 +63,6 @@ configs:
           hs.status = "Healthy"
           hs.message = obj.status.phase
           return hs
-        elseif string.find(string.lower(obj.status.phase), "error") or
-               string.find(string.lower(obj.status.phase), "fail") then
-          hs.status = "Degraded"
-          hs.message = obj.status.phase
-          return hs
         end
       end
       hs.status = "Progressing"
