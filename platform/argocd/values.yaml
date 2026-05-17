@@ -105,6 +105,8 @@ configs:
       g, backstage, role:backstage-reader
     policy.default: role:''
     scopes: "[groups]"
+redisSecretInit:
+  enabled: false
 controller:
   metrics:
     enabled: true
