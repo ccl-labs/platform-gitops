@@ -13,7 +13,7 @@ spec:
     path: platform/applications
     directory:
       recurse: true
-      exclude: 'root-3-others/vcluster-dev.yaml'
+      exclude: 'vcluster-dev.yaml'
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
