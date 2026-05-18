@@ -56,6 +56,26 @@ configs:
       hs.status = "Progressing"
       hs.message = "Waiting for ClusterSecretStore to be ready"
       return hs
+    resource.customizations.health.gateway.networking.k8s.io_Gateway: |
+      hs = {}
+      if obj.status ~= nil and obj.status.conditions ~= nil then
+        for i, condition in ipairs(obj.status.conditions) do
+          if condition.type == "Programmed" then
+            if condition.status == "True" then
+              hs.status = "Healthy"
+              hs.message = condition.message
+              return hs
+            else
+              hs.status = "Progressing"
+              hs.message = condition.message
+              return hs
+            end
+          end
+        end
+      end
+      hs.status = "Progressing"
+      hs.message = "Waiting for Gateway to be programmed"
+      return hs
     resource.customizations.health.postgresql.cnpg.io_Cluster: |
       hs = {}
       if obj.status ~= nil and obj.status.phase ~= nil then
