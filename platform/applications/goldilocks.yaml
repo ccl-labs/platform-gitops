@@ -18,6 +18,9 @@ spec:
     - repoURL: https://github.com/okccl/platform-gitops.git
       targetRevision: main
       ref: values
+    - repoURL: https://github.com/okccl/platform-gitops.git
+      targetRevision: main
+      path: platform/goldilocks/app-config
   destination:
     server: https://kubernetes.default.svc
     namespace: goldilocks
