@@ -2,7 +2,7 @@ backstage:
   image:
     registry: ghcr.io
     repository: okccl/backstage
-    tag: sha-7aaa69bab6a0d4c5eb261c5e76a7eaa6803a641a
+    tag: sha-2930659b9e06d4332b8c53ee1d219a9237baccc3
     pullPolicy: Always
     pullSecrets:
       - ghcr-pull-secret
